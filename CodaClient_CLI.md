@@ -310,22 +310,38 @@ messageType-messageColumn | The column used for the message reported from the ap
 
 ### errorquery Command
 
-The Error Query command allows you to browse specific error messages, or list messages needing attention from the community.  It
-is also the main entrypoint to interacting with the errors - you can see discussions and troubleshooting steps, vote on how useful
-you found them, and post your own responses.  Don't forget, every vote and post gives you a boost to your Reputation score!
+The Error Query command allows you to browse specific error messages, or list messages needing attention from the community.  It is also the main entrypoint to interacting with the errors - you can see discussions and troubleshooting steps, vote on how useful you found them, and post your own responses.  Don't forget, every vote and post gives you a boost to your Reputation score!
 
+Once you execute the errorquery command, the results will be displayed to you and a command prompt will let you enter interactive commands to work with it.
 
+Each Parameter is to be used by itself, with no other parameters.  For example, if you use `--code=`, don't use any of the other ones.  Parameters to the errorquery command are as follows:
+
+Parameter | Description
+---- | ----
+--code= | Specifies the error code to retrieve.  For example: `codaclient.linux eq --code="5310"`
+--unanalyzed --uz | Use either the long or short version of this option to retrieve a list of Error Codes for your selected Network that have not been analyzed yet for Severity or Meaning.  Check out [Community Rules](Community_Rules.md) for a list of privileges that allow you to update Error Codes and how you earn them.
+--unanswered --ua | Use either the long or short version of this option to retrieve a list of Error Codes for your selected Network that have not yet had Troubleshooting Steps submitted.  Submitting a Troubleshooting Step to an unanswered Error, and having it voted up by the Community, will earn you a big boost to your reputation.
+
+Once you are reviewing an Error Code and its associated Discussions and Troubleshooting suggestions, you will have an opportunity to post a response, or vote on the responses from other members.  You may enter `?` on a command input prompt to display a list of available commands at the level you are at.
 
 <a name="errorupdate">
 
 ### errorupdate Command
 
+As a Moderator, you have the priviledge to update an Error Code's analysis fields.  Doing so will achieve reputation the first time you update an error code - but subsequent updates to the same code will not award any more reputation.
+
+To update a code, add the following parameters:
+
+Parameter | Description
+---- | ----
+--code= | Specify the error code to be updated, for example `--code="5310"`
+--severity= | Specify the severity:  1=Critical, 2=Important, 3=Nominal.
+--meaning= | Enter the plain-English meaning of the code.  For example `--meaning="The log file format is improperly specified - perhaps an invalid character in the path."`
 
 <a name="mainconfig">
 
 ## Main Configuration File
-The Main Configuration File contains configurations pertaining to executing CodaClient under a specific context.  This must be
-specified in JSON format as the following example:
+The Main Configuration File contains configurations pertaining to executing CodaClient under a specific context.  This must be specified in JSON format as the following example:
 
 ```
 {
@@ -334,6 +350,7 @@ specified in JSON format as the following example:
   "apikey": "a5147f83b4ef4b2d9cc4faa898d0fa39795ee99ebe4a4c8884317a12bc53a632",
   "maximumSeverity": 1,
   "reportPath": "/home/stakepool/reports/coda",
+  "prometheusFile": "/home/stakepool/cnode/prometheus/coda.txt",
   "analysis": {
     "notification": true,
     "smtpServer": "smtp.gmail.com",
@@ -351,9 +368,10 @@ Field | Meaning
 network | The network or app to which all your operations will pertain.  Note that you can work with multiple networks by simply having multiple config files.
 apiserver | Always use https, and use prod.codaea.io for Production (Mainnet), or test.codaea.io for Test (Testnet).  Note that you will have to request an account separately on Mainnet and Testnet.
 apikey | The API Key you received after registering for API access.
+reportPath | The analysis reports will be output to this folder.
+prometheusFile | If a file path is specified, CodaClient will write `analyze` statistics to the text file using Prometheus Node Exporter format ([Linux](https://prometheus.io/download/#node_exporter) or [Windows](https://github.com/prometheus-community/windows_exporter)).  Simply include this file in your launch parameters for Node Exporter using the `--collector.textfile.directory` parameter.
 analysis | When you run an error log analysis, you can enable email notifications of Severity 1 messages in your logs.  If `notification` is set to `true`, the email settings will be used as shown above.  Emails will be sent if any Severity 1 errors are found in your logs, with details on the message(s).
 maximumSeverity | Each Error Code when analyzed by the CodaEA community is assigned a severity of 1 (critical), 2 (important) or 3 (nominal).  Whatever you set here, the analysis will be cached, and subsequent analyses can skip messages deemed unimportant by you and the other members of the community.  Only error codes with an unassigned severity, or severity of this setting and below, will be analyzed.
-reportPath | The analysis reports will be output to this folder.
 
 IMPORTANT NOTE:  The API Key you receive is private to you, and must not be given out.  It expires after 1 year, or whenever 
 you want to generate a new one (which will invalidate any prior keys).  If you somehow lose access to your account, you can
