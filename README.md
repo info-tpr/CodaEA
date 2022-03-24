@@ -1,9 +1,7 @@
 # What is CodaEA?
 
-
-![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true)
-
-Coda means a concluding or closing part of a statement, or closing part of a musical piece.  CodaEA completes the job of application server operation by providing a much-needed service and functionality that will help both server operators, and software developers, to run and improve their server software.
+---- | ----
+![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true) | Coda means a concluding or closing part of a statement, or closing part of a musical piece.  CodaEA completes the job of application server operation by providing a much-needed service and functionality that will help both server operators, and software developers, to run and improve their server software.
 
 CodaEA is an Error Analysis ecosystem designed to link communities around networks or applications for mutual support.  Network Operators typically have the job of running server software, which emit execution logs.  Often, the error messages are cryptic or otherwise difficult to determine a) whether they are siginificant or not, and b) what you should do to fix it - especially if you are new to operating that software.
 
