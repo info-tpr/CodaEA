@@ -1,4 +1,4 @@
-#What is CodaEA?
+# What is CodaEA?
 
 
 ![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true)
