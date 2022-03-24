@@ -48,14 +48,14 @@ Example:
 
     <os>:  Supported Operating Systems are Linux (Ubuntu 20.04 LTS)
 
-    <path-to-config-file>:  See the section on [Main Configuration File](https://github.com/info-tpr/CodaEA/blob/main/CodaClient_CLI.md#mainconfig) for file schema.
+    <path-to-config-file>:  See the section on Main Configuration File for file schema.
 
     <command>:  One of the following commands.  Each command will have a section below that will detail options.  Note that
                 each command has an alias you can use as a shorthand form.
 
 Command | Alias | Purpose
 ------- | ----- | -----
-[accountquery](https://github.com/info-tpr/CodaEA/blob/main/CodaClient_CLI.md#accountquery) | aq | Allows you to query or update your Account on CodaEA.  IMPORTANT NOTE:  By registering, you will receive both a Private Key, and an API Key.  These keys are used to operate and recover your Account, and must be kept safe.  Retrieval of Account data will obfuscate these keys.
+[accountquery](#accountquery) | aq | Allows you to query or update your Account on CodaEA.  IMPORTANT NOTE:  By registering, you will receive both a Private Key, and an API Key.  These keys are used to operate and recover your Account, and must be kept safe.  Retrieval of Account data will obfuscate these keys.
 [analyze](#analyze) | az | This command will query a log, and submit the entries against the CodaEA database, and produce a report.  The report is in XML format, with XSLT stylesheet to make it viewable and interactive on a web browser.
 [errorquery](#errorquery) | eq | Use this to query a specific error message, retrieve its community input, and post to it.  Please see [Community Rules](Community_Rules.md) for the rules and rewards for participation.
 [errorupdate](#errorupdate) | eu | Once you have earned the Moderator badge, you can post updates to an Error Message.  The updates you can post are Accepted Meaning, and Accepted Severity.
