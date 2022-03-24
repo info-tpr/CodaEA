@@ -1,6 +1,6 @@
 #What is CodaEA?
 
-![Coda Logo](https://github.com/info-tpr/CodaEA/edit/main/images/CodaLogo-Imageonly-transparent.png)
+![Coda Logo](https://github.com/info-tpr/CodaEA/main/images/CodaLogo-Imageonly-transparent.png)
 
 Coda means a concluding or closing part of a statement, or closing part of a musical piece.  CodaEA completes the job of application 
 server operation by providing a much-needed service and functionality that will help both server operators, and software developers, 
