@@ -62,6 +62,10 @@ Badges are assigned either through earning them, or by Coda System Administrator
 
 Badges are also assigned in a Network (or app) context.  You could earn a badge for a specific network, but if you want to use the privileges on objects pertaining to another network, you need to earn that badge interacting with that network's objects (discussions, troubleshooting, comments & errors).  We created this segregation in order to build trust and prevent abuse of earned privileges.  It would not be appropriate, for example, if an expert in Cardano network operation were to try to moderate errors pertaining to Prometheus Node Exporter, unless they were also certified an expert in that domain as well.
 
+The assignment of a Badge by the system also awards you 100 Reputation Points.
+
+And, coming by the end of the year, for all the badges you have earned, you will receive an NFT deposited into the payment wallet on record.
+
 Badge Name|Badge Code|Badge Description
 ----|----|----
 Advisor|AV|Post 10 Troubleshooting suggestions that are voted up at least once
