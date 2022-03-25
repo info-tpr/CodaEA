@@ -64,7 +64,7 @@ Badges are also assigned in a Network (or app) context.  You could earn a badge 
 
 The assignment of a Badge by the system also awards you 100 Reputation Points.
 
-And, coming by the end of the year, for all the badges you have earned, you will receive an NFT deposited into the payment wallet on record.
+And, coming by the end of the year, for each of the badges you have earned, you will receive an NFT deposited into the payment wallet on record.
 
 Badge Name|Badge Code|Badge Description
 ----|----|----
