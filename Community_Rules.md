@@ -58,6 +58,8 @@ If a user exceeds the threshold of confirmed violations in a given calendar year
 
 If the item is found to not be in violation, no further penalty is incurred.
 
+![Violation Reporting Process](ItemREportProcess.jpg)
+
 ## Reputation
 
 - Every time you post (an Error Discussion entry, Troubleshooting Step, or Comments), you are rewarded with 10 points.
