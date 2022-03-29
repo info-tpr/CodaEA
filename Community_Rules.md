@@ -58,7 +58,7 @@ If a user exceeds the threshold of confirmed violations in a given calendar year
 
 If the item is found to not be in violation, no further penalty is incurred.
 
-![Violation Reporting Process](https://github.com/info-tpr/CodaEA/blob/main/ItemREportProcess.jpg)
+![Violation Reporting Process](https://github.com/info-tpr/CodaEA/blob/main/ItemReportProcess.jpg?raw=true)
 
 ## Reputation
 
