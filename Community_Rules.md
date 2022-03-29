@@ -58,7 +58,7 @@ If a user exceeds the threshold of confirmed violations in a given calendar year
 
 If the item is found to not be in violation, no further penalty is incurred.
 
-![Violation Reporting Process](ItemREportProcess.jpg)
+![Violation Reporting Process](./ItemREportProcess.jpg)
 
 ## Reputation
 
