@@ -52,7 +52,7 @@ When you are posting or moderating these items, please use the following guideli
 
 Anyone can report that an item violates the rules.  To do so, vote "Report" on that item.  It will be flagged for Moderators to review.  A Moderator would then decide whether that item is indeed in violation or not.
 
-If the item is found to be in violation, that item is removed from viewing.  Note that it is kept on record, but not visible to the public.  If, as the poster, you feel that the Moderator ruled incorrectly, you can appeal the ruling, in which case a different Moderator will be required to rule on it.  Rulings of a second Moderator are final.
+If the item is found to be in violation, that item is removed from viewing.  Note that it is kept on record, but not visible to the public.  If, as the poster, you feel that the Moderator ruled incorrectly, you can appeal the ruling (your banned item is still visible to you, simply vote "Appeal" on it), in which case a different Moderator will be required to rule on it.  Rulings of a second Moderator are final.
 
 If a user exceeds the threshold of confirmed violations in a given calendar year (currently 10), the account is disabled and the email address used is added to the banned list.  You can appeal to The Parallel Revolution by email, but depending on the severity of the violation you might not be granted access again.
 
