@@ -109,3 +109,4 @@ Yearling|YL|Earn at least 2000 reputation, active for 1 year
 # Other Links
 
 [CodaClient Command Line Interface Specifications](CodaClient_CLI.md)
+[About CodaEA Accounts](Coda_Accounts.md)

@@ -1,4 +1,6 @@
-﻿# CodaClient Command Line Utility
+﻿![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true)
+
+# CodaClient Command Line Utility
 
 ## Purpose of CodaEA
 CodaEA is an Error Analysis ecosystem designed to link communities around networks or applications for mutual support.  
@@ -44,7 +46,7 @@ Syntax:
 `    codaclient.<os> <path-to-config-file> <command> <command-options>`
 
 Example:
-`    codaclient.linux ./cardano-config.json jq --query=./cardano-journal-query.json`
+`    codaclient.linux ./cardano-config.json az`
 
     <os>:  Supported Operating Systems are Linux (Ubuntu 20.04 LTS)
 
@@ -88,14 +90,99 @@ either request support on our [Github project page](https://github.com/info-tpr/
 configure the application to output in one of the supported formats, or write some code that will transform your application 
 logs to that format.
 
-To specify an Analysis, use the option:  `--analysis-file=<path-to-analysis-configuration>`.  This file must be JSON format,
-and follow these guidelines:
+If you run the Analyze command, all analyses in the array will be run in order.  If you want to change the order or specify specific analyses, use the --analysis= option, like so:
+
+`codaclient.linux ./cardano-config.json az --analysis=node-log,prometheus-log`
+
+<a name="errorquery">
+
+### errorquery Command
+
+The Error Query command allows you to browse specific error messages, or list messages needing attention from the community.  It is also the main entrypoint to interacting with the errors - you can see discussions and troubleshooting steps, vote on how useful you found them, and post your own responses.  Don't forget, every vote and post gives you a boost to your Reputation score!
+
+Once you execute the errorquery command, the results will be displayed to you and a command prompt will let you enter interactive commands to work with it.
+
+Each Parameter is to be used by itself, with no other parameters.  For example, if you use `--code=`, don't use any of the other ones.  Parameters to the errorquery command are as follows:
+
+Parameter | Description
+---- | ----
+--code= | Specifies the error code to retrieve.  For example: `codaclient.linux eq --code="5310"`
+--unanalyzed --uz | Use either the long or short version of this option to retrieve a list of Error Codes for your selected Network that have not been analyzed yet for Severity or Meaning.  Check out [Community Rules](Community_Rules.md) for a list of privileges that allow you to update Error Codes and how you earn them.
+--unanswered --ua | Use either the long or short version of this option to retrieve a list of Error Codes for your selected Network that have not yet had Troubleshooting Steps submitted.  Submitting a Troubleshooting Step to an unanswered Error, and having it voted up by the Community, will earn you a big boost to your reputation.
+
+Once you are reviewing an Error Code and its associated Discussions and Troubleshooting suggestions, you will have an opportunity to post a response, or vote on the responses from other members.  You may enter `?` on a command input prompt to display a list of available commands at the level you are at.
+
+<a name="errorupdate">
+
+### errorupdate Command
+
+As a Moderator, you have the priviledge to update an Error Code's analysis fields.  Doing so will achieve reputation the first time you update an error code - but subsequent updates to the same code will not award any more reputation.
+
+To update a code, add the following parameters:
+
+Parameter | Description
+---- | ----
+--code= | Specify the error code to be updated, for example `--code="5310"`
+--severity= | Specify the severity:  1=Critical, 2=Important, 3=Nominal.
+--meaning= | Enter the plain-English meaning of the code.  For example `--meaning="The log file format is improperly specified - perhaps an invalid character in the path."`
+
+<a name="mainconfig">
+
+## Main Configuration File
+The Main Configuration File contains configurations pertaining to executing CodaClient under a specific context.  This must be specified in JSON format as the following example:
 
 ```
 {
+  "network": "cardano",
+  "apiserver": "https://prod.codaea.io",
+  "apikey": "a5147f83b4ef4b2d9cc4faa898d0fa39795ee99ebe4a4c8884317a12bc53a632",
+  "maximumSeverity": 1,
+  "reportPath": "/home/stakepool/reports/coda",
+  "prometheusFile": "/home/stakepool/cnode/prometheus/coda.txt",
+  "analysis": {
+    "lastRunDate": null,
+    "notification": true,
+    "smtpServer": "smtp.gmail.com",
+    "smtpPort": 25,
+    "smtpAccount": "cardano@gmail.com",
+    "smtpPassword": "68cr6t%T25ti!",
+    "smtpUseSSL": true,
+    "sendToAddress": "notify@myorg.com"
+  },
+  "analyze": [
+    {
+       // analysis input specs
+    }
+  ]
+}
+```
+
+Field | Meaning
+----- | -----
+network | The network or app to which all your operations will pertain.  Note that you can work with multiple networks by simply having multiple config files.
+lastRunDate | The date/time stamp (UTC) that Analyze was last run, leave null to initialize
+apiserver | Always use https, and use prod.codaea.io for Production (Mainnet), or test.codaea.io for Test (Testnet).  Note that you will have to request an account separately on Mainnet and Testnet.
+apikey | The API Key you received after registering for API access.
+reportPath | The analysis reports will be output to this folder.
+prometheusFile | If a file path is specified, CodaClient will write `analyze` statistics to the text file using Prometheus Node Exporter format ([Linux](https://prometheus.io/download/#node_exporter) or [Windows](https://github.com/prometheus-community/windows_exporter)).  Simply include this file in your launch parameters for Node Exporter using the `--collector.textfile.directory` parameter.
+analysis | When you run an error log analysis, you can enable email notifications of Severity 1 messages in your logs.  If `notification` is set to `true`, the email settings will be used as shown above.  Emails will be sent if any Severity 1 errors are found in your logs, with details on the message(s).
+analyze | This is an array of Analysis inpt specifications, see below.  Each one of these will be processed in order, or if you specify the names on the command line, only those names will be processed.
+
+IMPORTANT NOTE:  The API Key you receive is private to you, and must not be given out.  It expires after 1 year, or whenever 
+you want to generate a new one (which will invalidate any prior keys).  If you somehow lose access to your account, you can
+generate a new API Key and recover it by providing the Private Key via the Account Recovery option on [The Parallel Revolution
+website](https://www.theparallelrevolution.com/Coda).
+
+IMPORTANT NOTE:  Sending emails requires CodaClient to run under root privileges.  If scheduled as a cron job, it should be
+done in the root account.
+
+
+```
+{
+  "name": "node-log"
   "input": "journal",
   "inputSpecs": {
-      "process": "cardano-node",
+      "process": "cardano",
       "type": "error",
       "maximumSeverity": 1
   }
@@ -106,29 +193,36 @@ The Analysis Config file specifies the input type, one of the following:
 
 Type | Meaning
 ---- | ----
-journal | Linux system journal (i.e. use `journalctl` to query)
-text/csv | Text, CSV format
-text/fixed | Text, fixed width format
-text/other | Text, Other delimiter format
+name | The analysis name you wish to give this analysis.  You can specify which analyses to run on the command line using the `az --analysis=` option.
+input | This specifies the input format, as indicated below.
+input: journal | Linux system journal (i.e. use `journalctl` to query)
+input: text/csv | Text, CSV format
+input: text/fixed | Text, fixed width format
+input: text/other | Text, Other delimiter format
+input: text/cardano | Special processor for Cardano-Node text log files
+inputSpecs | This is an object that contains the specs for the type indicated for `input`.  For example, if `input` is `journal`, then you would use the Journal Specs for `inputSpecs`.
 
 Based on the type specified, the `inputSpecs` will use one of the following formats:
 
 IMPORTANT NOTE:  Accessing the System Journal requires root privileges.  If scheduled as a cron job, it should be
 done in the root account.
 
+
 #### Journal Specs
 
 ```
 {
-  "process": "cardano-node",
-  "type": "error"
+  "process": "cardano",
+  "messageType": {
+    "values": ["1","2","3"]
+  }
 }
 ```
 
 Field | Description
 ---- | ----
 process | The process reporting to the Journal.  In the example for Cardano network cardano-node is the process for running the blockchain network node.
-type | The type of message to query from the Journal; this could be "error", "warning" or "debug".
+messageType | The type of message to query from the Journal; this could be "error", "warning" or "debug".  In the `values` field, place an array of severities you wish to include.
 
 #### Text/CSV Specs
 
@@ -160,7 +254,8 @@ delimiters.  For `text/csv` input type, the `inputSpecs` object must be of the f
     "columnName": "Severity",
     "values": ["Error","Exception"],
     "codeColumn": "Code",
-    "messageColumn": "Message"
+    "messageColumn": "Message",
+    "timeColumn": "Date"
   }
 }
 ```
@@ -175,6 +270,7 @@ messageType-columnName | This determines the column to use for which message typ
 messageType-values | A list of values in the above column to analyze.
 messageType-codeColumn | The column used to identify the error code.  This is usually a number, but could also be some kind of alphanumeric identifier.
 messageType-messageColumn | The column used for the message reported from the application.
+messageType-timeColumn | The column used for date/time the error was reported.
 
 #### Text/fixed Specs
 
@@ -223,7 +319,8 @@ For `text/fixed` input type, the `inputSpecs` object must be of the following fo
     "columnName": "Severity",
     "values": ["Error"],
     "codeColumn": "Code",
-    "messageColumn": "Message"
+    "messageColumn": "Message",
+    "timeColumn": "Date"
   }
 }
 ```
@@ -242,6 +339,7 @@ messageType-columnName | This determines the column to use for which message typ
 messageType-values | A list of values in the above column to analyze.
 messageType-codeColumn | The column used to identify the error code.  This is usually a number, but could also be some kind of alphanumeric identifier.
 messageType-messageColumn | The column used for the message reported from the application.
+messageType-timeColumn | The column used for date/time the error was reported.
 
 #### Text/other Specs
 
@@ -306,77 +404,50 @@ messageType-values | A list of values in the above column to analyze.
 messageType-codeColumn | The column used to identify the error code.  This is usually a number, but could also be some kind of alphanumeric identifier.
 messageType-messageColumn | The column used for the message reported from the application.
 
-<a name="errorquery">
+#### Text/cardano Specs
 
-### errorquery Command
-
-The Error Query command allows you to browse specific error messages, or list messages needing attention from the community.  It is also the main entrypoint to interacting with the errors - you can see discussions and troubleshooting steps, vote on how useful you found them, and post your own responses.  Don't forget, every vote and post gives you a boost to your Reputation score!
-
-Once you execute the errorquery command, the results will be displayed to you and a command prompt will let you enter interactive commands to work with it.
-
-Each Parameter is to be used by itself, with no other parameters.  For example, if you use `--code=`, don't use any of the other ones.  Parameters to the errorquery command are as follows:
-
-Parameter | Description
----- | ----
---code= | Specifies the error code to retrieve.  For example: `codaclient.linux eq --code="5310"`
---unanalyzed --uz | Use either the long or short version of this option to retrieve a list of Error Codes for your selected Network that have not been analyzed yet for Severity or Meaning.  Check out [Community Rules](Community_Rules.md) for a list of privileges that allow you to update Error Codes and how you earn them.
---unanswered --ua | Use either the long or short version of this option to retrieve a list of Error Codes for your selected Network that have not yet had Troubleshooting Steps submitted.  Submitting a Troubleshooting Step to an unanswered Error, and having it voted up by the Community, will earn you a big boost to your reputation.
-
-Once you are reviewing an Error Code and its associated Discussions and Troubleshooting suggestions, you will have an opportunity to post a response, or vote on the responses from other members.  You may enter `?` on a command input prompt to display a list of available commands at the level you are at.
-
-<a name="errorupdate">
-
-### errorupdate Command
-
-As a Moderator, you have the priviledge to update an Error Code's analysis fields.  Doing so will achieve reputation the first time you update an error code - but subsequent updates to the same code will not award any more reputation.
-
-To update a code, add the following parameters:
-
-Parameter | Description
----- | ----
---code= | Specify the error code to be updated, for example `--code="5310"`
---severity= | Specify the severity:  1=Critical, 2=Important, 3=Nominal.
---meaning= | Enter the plain-English meaning of the code.  For example `--meaning="The log file format is improperly specified - perhaps an invalid character in the path."`
-
-<a name="mainconfig">
-
-## Main Configuration File
-The Main Configuration File contains configurations pertaining to executing CodaClient under a specific context.  This must be specified in JSON format as the following example:
+When running a node on the Cardano network, you can scan the logs on your Block Producer and Relay servers.  CodaClient supports text logging to a text file using the Cardano-Node text scribe (see below for instructions to configure).  The `inputSpecs` object for this type of log uses the following simplified format:
 
 ```
 {
-  "network": "cardano",
-  "apiserver": "https://prod.codaea.io",
-  "apikey": "a5147f83b4ef4b2d9cc4faa898d0fa39795ee99ebe4a4c8884317a12bc53a632",
-  "maximumSeverity": 1,
-  "reportPath": "/home/stakepool/reports/coda",
-  "prometheusFile": "/home/stakepool/cnode/prometheus/coda.txt",
-  "analysis": {
-    "notification": true,
-    "smtpServer": "smtp.gmail.com",
-    "smtpPort": 25,
-    "smtpAccount": "cardano@gmail.com",
-    "smtpPassword": "68cr6t%T25ti!",
-    "smtpUseSSL": true,
-    "sendToAddress": "notify@myorg.com"
+  "inputFile": "/var/tmp/myapp/currentlog",
+  "messageType": {
+    "values": ["Error"]
   }
 }
 ```
 
-Field | Meaning
------ | -----
-network | The network or app to which all your operations will pertain.  Note that you can work with multiple networks by simply having multiple config files.
-apiserver | Always use https, and use prod.codaea.io for Production (Mainnet), or test.codaea.io for Test (Testnet).  Note that you will have to request an account separately on Mainnet and Testnet.
-apikey | The API Key you received after registering for API access.
-reportPath | The analysis reports will be output to this folder.
-prometheusFile | If a file path is specified, CodaClient will write `analyze` statistics to the text file using Prometheus Node Exporter format ([Linux](https://prometheus.io/download/#node_exporter) or [Windows](https://github.com/prometheus-community/windows_exporter)).  Simply include this file in your launch parameters for Node Exporter using the `--collector.textfile.directory` parameter.
-analysis | When you run an error log analysis, you can enable email notifications of Severity 1 messages in your logs.  If `notification` is set to `true`, the email settings will be used as shown above.  Emails will be sent if any Severity 1 errors are found in your logs, with details on the message(s).
-maximumSeverity | Each Error Code when analyzed by the CodaEA community is assigned a severity of 1 (critical), 2 (important) or 3 (nominal).  Whatever you set here, the analysis will be cached, and subsequent analyses can skip messages deemed unimportant by you and the other members of the community.  Only error codes with an unassigned severity, or severity of this setting and below, will be analyzed.
+Field | Description
+---- | ----
+inputFile | The path to the log file to read
+messageType | This object determines the filter of entries to read from the log file and analyze.
+messageType-values | A list of values in the above column to analyze.
 
-IMPORTANT NOTE:  The API Key you receive is private to you, and must not be given out.  It expires after 1 year, or whenever 
-you want to generate a new one (which will invalidate any prior keys).  If you somehow lose access to your account, you can
-generate a new API Key and recover it by providing the Private Key via the Account Recovery option on [The Parallel Revolution
-website](https://www.theparallelrevolution.com/Coda).
 
-IMPORTANT NOTE:  Sending emails requires CodaClient to run under root privileges.  If scheduled as a cron job, it should be
-done in the root account.
+IMPORTANT NOTE:  For `text/cardano` processing, you must configure your cardano-node instance to scribe logs to a file.  In order to do so, edit your `mainnet-config.json` with the following sections:
+
+```
+...
+  "defaultScribes": [
+    [
+      "FileSK",
+      "{path-to-log-file}"
+    ]
+  ]
+
+...
+  ],
+  "setupScribes": [
+    {
+      "scFormat": "ScText",
+      "scKind": "FileSK",
+      "scName": "{path-to-log-file}",
+      "scRotation": null
+    }
+  ]
+...
+```
+
+For example, if you wish your log file to be /home/stakepool/cnode/logs/cardano-node.log then place that in the 2 entries where it says `{path-to-log-file}`.  Also, it is *very important* to use `ScText` as the format, and *not* `ScJson`.
+
+Restart your node after making changes to the mainnet-config.  It is recommended that you run your node as a systemd unit that autostarts on system startup, and not as a process spawned from a shell.
