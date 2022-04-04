@@ -451,3 +451,7 @@ IMPORTANT NOTE:  For `text/cardano` processing, you must configure your cardano-
 For example, if you wish your log file to be /home/stakepool/cnode/logs/cardano-node.log then place that in the 2 entries where it says `{path-to-log-file}`.  Also, it is *very important* to use `ScText` as the format, and *not* `ScJson`.
 
 Restart your node after making changes to the mainnet-config.  It is recommended that you run your node as a systemd unit that autostarts on system startup, and not as a process spawned from a shell.
+
+# Other Links
+
+[About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md)
