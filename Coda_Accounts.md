@@ -15,5 +15,4 @@ Developer | Like an Organization account, a Developer represents a Developer Org
 
 # Other Links
 
-[CodaClient Command Line Interface Specifications](CodaClient_CLI.md)
-[Community Rules](Community_Rules.md)
+[CodaClient Command Line Interface Specifications](CodaClient_CLI.md) | [Community Rules](Community_Rules.md)
