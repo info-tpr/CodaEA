@@ -22,7 +22,7 @@ In order to be able to access the Coda database, you must create and validate an
 to [The Parallel Revolution](https://www.theparallelrevolution.com/Coda) and follow the process to request access.
 
 There are 3 types of Accounts:  Operator, Organizational Administrator, and Organizational User.  CodaClient is designed for
-use by an Operator Account.
+use by any of these Accounts.
 
 ## CodaClient
 The CodaClient is a command line utility that allows you, as a Network Operator, to check the output of your logs against the
