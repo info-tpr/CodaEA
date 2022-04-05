@@ -149,6 +149,10 @@ The Main Configuration File contains configurations pertaining to executing Coda
     "smtpUseSSL": true,
     "sendToAddress": "notify@myorg.com"
   },
+  "logging": {
+    "logLevel": "Debug",
+    "logPath": "codaclient.log"
+  },
   "analyze": [
     {
        // analysis input specs
@@ -166,6 +170,9 @@ apikey | The API Key you received after registering for API access.
 reportPath | The analysis reports will be output to this folder.
 prometheusFile | If a file path is specified, CodaClient will write `analyze` statistics to the text file using Prometheus Node Exporter format ([Linux](https://prometheus.io/download/#node_exporter) or [Windows](https://github.com/prometheus-community/windows_exporter)).  Simply include this file in your launch parameters for Node Exporter using the `--collector.textfile.directory` parameter.
 analysis | When you run an error log analysis, you can enable email notifications of Severity 1 messages in your logs.  If `notification` is set to `true`, the email settings will be used as shown above.  Emails will be sent if any Severity 1 errors are found in your logs, with details on the message(s).
+logging | This object specifies how CodaClient will log its actions
+logging-logLevel | One of `Off` (no logging), `Error` (Errors only), `Warning` (Errors and Warnings), or `Debug` (All messages)
+logging-logPath | Logs will be saved to the file in the specified path; if left blank, logs will not be saved and only output to stdout
 analyze | This is an array of Analysis inpt specifications, see below.  Each one of these will be processed in order, or if you specify the names on the command line, only those names will be processed.
 
 IMPORTANT NOTE:  The API Key you receive is private to you, and must not be given out.  It expires after 1 year, or whenever 
@@ -199,7 +206,7 @@ input: journal | Linux system journal (i.e. use `journalctl` to query)
 input: text/csv | Text, CSV format
 input: text/fixed | Text, fixed width format
 input: text/other | Text, Other delimiter format
-input: text/cardano | Special processor for Cardano-Node text log files
+input: text/cardano | Special processor for Cardano-Node JSON text log files
 inputSpecs | This is an object that contains the specs for the type indicated for `input`.  For example, if `input` is `journal`, then you would use the Journal Specs for `inputSpecs`.
 
 Based on the type specified, the `inputSpecs` will use one of the following formats:
@@ -300,7 +307,8 @@ For `text/fixed` input type, the `inputSpecs` object must be of the following fo
       "columnName": "Code",
       "startColumn": 13,
       "length": 15,
-      "trim": true
+      "trim": true,
+      "trimChars": "[]()"
     },
     {
       "columnName": "Severity",
@@ -334,6 +342,7 @@ columnSpec-columnName | The name you want to give to the column; all names must 
 columnSpec-startColumn | The character position in the line where the column starts.  First character position is 1.
 columnSpec-length | The number of characters to include in the data.
 columnSpec-trim | Whether or not to trim leading and trailing whitespace (tabs, spaces, etc.).
+columnSpec-trimChars | If `trim` is `true`, then this optional parameter specifies additional characters beyond whitespace to remove from beginning/end of the column value.
 messageType | This object determines the filter of entries to read from the log file and analyze.  Using the column name from the columnSpec array, you can specify how the log file is read.
 messageType-columnName | This determines the column to use for which message types to analyze.
 messageType-values | A list of values in the above column to analyze.
@@ -367,7 +376,8 @@ For `text/fixed` input type, the `inputSpecs` object must be of the following fo
     },
     {
       "columnName": "Code",
-      "trim": true
+      "trim": true,
+      "trimChars": "[]"
     },
     {
       "columnName": "Severity",
@@ -398,6 +408,7 @@ skipLines | The number of lines to skip at the head of the file, in case there a
 columnSpec | An array of column specificatoin objects, one for each column in order they appear in the file.  It is not necessary to have column names on the first line.
 columnSpec-columnName | The name you want to give to the column; all names must be unique in the list.
 columnSpec-trim | Whether or not to trim leading and trailing whitespace (tabs, spaces, etc.).
+columnSpec-trimChars | If `trim` is `true`, then this optional parameter specifies additional characters beyond whitespace to remove from beginning/end of the column value.
 messageType | This object determines the filter of entries to read from the log file and analyze.  Using the column name from the columnSpec array, you can specify how the log file is read.
 messageType-columnName | This determines the column to use for which message types to analyze.
 messageType-values | A list of values in the above column to analyze.
@@ -439,7 +450,7 @@ IMPORTANT NOTE:  For `text/cardano` processing, you must configure your cardano-
   ],
   "setupScribes": [
     {
-      "scFormat": "ScText",
+      "scFormat": "ScJson",
       "scKind": "FileSK",
       "scName": "{path-to-log-file}",
       "scRotation": null
@@ -448,9 +459,10 @@ IMPORTANT NOTE:  For `text/cardano` processing, you must configure your cardano-
 ...
 ```
 
-For example, if you wish your log file to be /home/stakepool/cnode/logs/cardano-node.log then place that in the 2 entries where it says `{path-to-log-file}`.  Also, it is *very important* to use `ScText` as the format, and *not* `ScJson`.
+For example, if you wish your log file to be /home/stakepool/cnode/logs/cardano-node.log then place that in the 2 entries where it says `{path-to-log-file}`.  Also, it is *very important* to use `ScJson` as the format, and *not* `ScText`.
 
 Restart your node after making changes to the mainnet-config.  It is recommended that you run your node as a systemd unit that autostarts on system startup, and not as a process spawned from a shell.
+
 
 # Other Links
 
