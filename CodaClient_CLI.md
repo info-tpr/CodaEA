@@ -184,6 +184,10 @@ IMPORTANT NOTE:  Sending emails requires CodaClient to run under root privileges
 done in the root account.
 
 
+### Analyze Input Specs
+
+The Analyze section is an array of source specifications using the following format:
+
 ```
 {
   "name": "node-log"
@@ -195,8 +199,6 @@ done in the root account.
   }
 }
 ```
-
-The Analysis Config file specifies the input type, one of the following:
 
 Type | Meaning
 ---- | ----
