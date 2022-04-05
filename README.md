@@ -6,11 +6,11 @@
 
 CodaEA is an Error Analysis ecosystem designed to link communities around networks or applications for mutual support.  Network Operators typically have the job of running server software, which emit execution logs.  Often, the error messages are cryptic or otherwise difficult to determine a) whether they are siginificant or not, and b) what you should do to fix it - especially if you are new to operating that software.
 
-CodaEA is the solution.  It provides a public REST API to report the errors, and query to determine what the community has analyzed as the appropriate meaning and severity of the error.  It facilitates discussion and troubleshooting.
+CodaEA is the solution.  It provides a public REST API to report the errors, and query to determine what the community has analyzed as the appropriate meaning and severity of the error.  It facilitates discussion and troubleshooting.  But more importantly, it provides visibility into the backend operations of server software - visibility to the operators for monitoring and issue alerts, and visibility to the software developers for in-field quality assessments and operational performance.
 
-Community Members earn reputation for their participation, and that reputation will be tied to the CODA Token cryptocurrency, which are awarded to the Members' Cardano wallet by the end of every epoch.
+As a Network Operator or Software Developer, you can join the CodaEA Community by creating an Account.  Community Members earn reputation for their participation, and that reputation will soon be tied to the CODA Token cryptocurrency, which are awarded to the Members' Cardano wallet by the end of every epoch.
 
-CODA Tokens can also be offered as bounties to help incentivize and prioritize focus on the solution of specific error messages.
+Another feature coming soon: CODA Tokens can also be offered by Network Operators as bounties to help incentivize and prioritize focus on the solution of specific error messages.  If non-Developers provide an answer to an Error Message with a bounty, they can be awarded that Bounty.
 
 The CODA Token payouts and features will be coming later this year.
 
