@@ -61,6 +61,7 @@ Command | Alias | Purpose
 [analyze](#analyze) | az | This command will query a log, and submit the entries against the CodaEA database, and produce a report.  The report is in XML format, with XSLT stylesheet to make it viewable and interactive on a web browser.
 [errorquery](#errorquery) | eq | Use this to query a specific error message, retrieve its community input, and post to it.  Please see [Community Rules](Community_Rules.md) for the rules and rewards for participation.
 [errorupdate](#errorupdate) | eu | Once you have earned the Moderator badge, you can post updates to an Error Message.  The updates you can post are Accepted Meaning, and Accepted Severity.
+[prometheusmerge](#prometheusmerge) | pm | In addition to the above commands, you can add a `prometheusmerge` command at the end to merge multiple Prometheus Node Exporter outputs into a single file.
 
 
 <a name="accountquery">
@@ -75,10 +76,9 @@ the `accountquery` command.
 
 #### Options
 
-Option | Description
+Parameters | Description
 ---- | ----
---query | Use this to retrieve your Account info.  You can add another option `--full` to retrieve all associated data.
---update | Use this to update your info.  Then you can specify which fields to update:  `name="new name"`, `email=new@email`, `wallet=new-wallet-address`
+\{accountId} | (Optional) the Account ID to query; if not specified, your own account is retrieved.  Example:  `codaclient.linux -aq 5345`
 
 
 <a name="analyze">
@@ -126,6 +126,44 @@ Parameter | Description
 --severity= | Specify the severity:  1=Critical, 2=Important, 3=Nominal.
 --meaning= | Enter the plain-English meaning of the code.  For example `--meaning="The log file format is improperly specified - perhaps an invalid character in the path."`
 
+<a name="prometheusmerge">
+
+### prometheusmerge Command
+
+Prometheus Node Exporter is free and open-source metric reporting system that is widely adopted ([Windows](https://www.devopsschool.com/blog/how-to-install-windows-exporter-for-prometheus/)) ([Linux](https://prometheus.io/docs/guides/node-exporter/)).  With CodaClient, each configuration file can handle one Prometheus text file.  If you have multiple analysis jobs generating multiple Node Exporter stats, and want to not overwrite them, you should use this command in each of your analysis executions.
+
+To specify a Prometheus Merge operation, you simply specify a file with a JSON array of file paths, where the last file path is the one that it will be merged with.
+
+On the command line, you put:
+
+`--prometheusmerge={path-to-config-file}`
+
+For example:
+
+`codaclient.linux ./oracle-scan.json az pm=./prometheus-merge.json`
+
+or
+
+`codaclient.linux ./oracle-scan.json az --prometheusmerge=./prometheus-merge.json`
+
+Let's take a hypothetical situation in which you run Oracle and Cardano, report stats for both apps.  So, you create 2 CodaClient config files. The contents of the `prometheus-merge.json` file in the above example may look like this:
+
+'''
+[
+  "/var/reports/prometheus/oracle_alertlog.txt",
+  "/var/reports/prometheus/cardano_report.txt",
+  "/var/reports/prometheus/prometheus.txt"
+]
+'''
+
+In this case, the first 2 files would be Prometheus outputs from other configs - an Oracle config file that may specify 1 or more alert log files to scan, and a Cardano scan file.  When you run each of these jobs, you specify the Prometheus Merge file:
+
+`codaclient.linux ./oracle-scan.json --analyze --prometheusmerge=./prometheus-merge.json`
+
+`codaclient.linux ./cardano.json az pm=./prometheus-merge.json`
+
+Then, when you run Node Exporter, specify the merged file `/var/reports/prometheus/prometheus.txt` for exporting via http.
+
 <a name="mainconfig">
 
 ## Main Configuration File
@@ -134,14 +172,19 @@ The Main Configuration File contains configurations pertaining to executing Coda
 ```
 {
   "network": "cardano",
+  "currentVersion": "1.33.0",
   "apiserver": "https://prod.codaea.io",
   "apikey": "a5147f83b4ef4b2d9cc4faa898d0fa39795ee99ebe4a4c8884317a12bc53a632",
   "maximumSeverity": 1,
   "reportPath": "/home/stakepool/reports/coda",
   "prometheusFile": "/home/stakepool/cnode/prometheus/coda.txt",
+  "uiOptions": {
+    "menuType": "short"
+  },
   "analysis": {
     "lastRunDate": null,
     "notification": true,
+    "smtpFromEmail": "coda-donotreply@tpr.org",
     "smtpServer": "smtp.gmail.com",
     "smtpPort": 25,
     "smtpAccount": "cardano@gmail.com",
@@ -164,6 +207,7 @@ The Main Configuration File contains configurations pertaining to executing Coda
 Field | Meaning
 ----- | -----
 network | The network or app to which all your operations will pertain.  Note that you can work with multiple networks by simply having multiple config files.
+currentVersion | The version of the network/application generating the log.
 lastRunDate | The date/time stamp (UTC) that Analyze was last run, leave null to initialize
 apiserver | Always use https, and use prod.codaea.io for Production (Mainnet), or test.codaea.io for Test (Testnet).  Note that you will have to request an account separately on Mainnet and Testnet.
 apikey | The API Key you received after registering for API access.
@@ -174,6 +218,9 @@ logging | This object specifies how CodaClient will log its actions
 logging-logLevel | One of `Off` (no logging), `Error` (Errors only), `Warning` (Errors and Warnings), or `Debug` (All messages)
 logging-logPath | Logs will be saved to the file in the specified path; if left blank, logs will not be saved and only output to stdout
 analyze | This is an array of Analysis inpt specifications, see below.  Each one of these will be processed in order, or if you specify the names on the command line, only those names will be processed.
+uiOptions | Represents options for the CodaClient user interface.
+uiOptions-menuType | Either `full` or `short` - whether to display shortened menus.
+
 
 IMPORTANT NOTE:  The API Key you receive is private to you, and must not be given out.  It expires after 1 year, or whenever 
 you want to generate a new one (which will invalidate any prior keys).  If you somehow lose access to your account, you can
@@ -203,12 +250,13 @@ The Analyze section is an array of source specifications using the following for
 Type | Meaning
 ---- | ----
 name | The analysis name you wish to give this analysis.  You can specify which analyses to run on the command line using the `az --analysis=` option.
-input | This specifies the input format, as indicated below.
+input | This specifies the input format processor, as indicated below.
 input: journal | Linux system journal (i.e. use `journalctl` to query)
 input: text/csv | Text, CSV format
 input: text/fixed | Text, fixed width format
 input: text/other | Text, Other delimiter format
 input: text/cardano | Special processor for Cardano-Node JSON text log files
+input: &lt;other> | Any other processor represents a plug-in.  Plug-in support will be coming soon.
 inputSpecs | This is an object that contains the specs for the type indicated for `input`.  For example, if `input` is `journal`, then you would use the Journal Specs for `inputSpecs`.
 
 Based on the type specified, the `inputSpecs` will use one of the following formats:
@@ -447,6 +495,7 @@ IMPORTANT NOTE:  For `text/cardano` processing, you must configure your cardano-
       "{path-to-log-file}"
     ]
   ]
+...
 
 ...
   ],
@@ -458,12 +507,15 @@ IMPORTANT NOTE:  For `text/cardano` processing, you must configure your cardano-
       "scRotation": null
     }
   ]
-...
 ```
 
 For example, if you wish your log file to be /home/stakepool/cnode/logs/cardano-node.log then place that in the 2 entries where it says `{path-to-log-file}`.  Also, it is *very important* to use `ScJson` as the format, and *not* `ScText`.
 
 Restart your node after making changes to the mainnet-config.  It is recommended that you run your node as a systemd unit that autostarts on system startup, and not as a process spawned from a shell.
+
+## Important Notes and Considerations
+
+In order to optimize performance, the CodaEA API server caches database items for up to a minute.  If you make any changes to an existing item, and immediately re-run CodaClient, it is possible that you may retrieve the cached data and see the pre-change results.  Just wait another minute and try again.
 
 
 # Other Links
