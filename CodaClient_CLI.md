@@ -57,11 +57,11 @@ Example:
 
 Command | Alias | Purpose
 ------- | ----- | -----
-[accountquery](#accountquery) | aq | Allows you to query or update your Account on CodaEA.  IMPORTANT NOTE:  By registering, you will receive both a Private Key, and an API Key.  These keys are used to operate and recover your Account, and must be kept safe.  Retrieval of Account data will obfuscate these keys.
-[analyze](#analyze) | az | This command will query a log, and submit the entries against the CodaEA database, and produce a report.  The report is in XML format, with XSLT stylesheet to make it viewable and interactive on a web browser.
-[errorquery](#errorquery) | eq | Use this to query a specific error message, retrieve its community input, and post to it.  Please see [Community Rules](Community_Rules.md) for the rules and rewards for participation.
-[errorupdate](#errorupdate) | eu | Once you have earned the Moderator badge, you can post updates to an Error Message.  The updates you can post are Accepted Meaning, and Accepted Severity.
-[prometheusmerge](#prometheusmerge) | pm | In addition to the above commands, you can add a `prometheusmerge` command at the end to merge multiple Prometheus Node Exporter outputs into a single file.
+[--accountquery](#accountquery) | aq | Allows you to query or update your Account on CodaEA.  IMPORTANT NOTE:  By registering, you will receive both a Private Key, and an API Key.  These keys are used to operate and recover your Account, and must be kept safe.  Retrieval of Account data will obfuscate these keys.
+[--analyze](#analyze) | az | This command will query a log, and submit the entries against the CodaEA database, and produce a report.  The report is in XML format, with XSLT stylesheet to make it viewable and interactive on a web browser.
+[--errorquery](#errorquery) | eq | Use this to query a specific error message, retrieve its community input, and post to it.  Please see [Community Rules](Community_Rules.md) for the rules and rewards for participation.
+[--errorupdate](#errorupdate) | eu | Once you have earned the Moderator badge, you can post updates to an Error Message.  The updates you can post are Accepted Meaning, and Accepted Severity.
+[--prometheusmerge](#prometheusmerge) | pm | In addition to the above commands, you can add a `prometheusmerge` command at the end to merge multiple Prometheus Node Exporter outputs into a single file.
 
 
 <a name="accountquery">
@@ -74,11 +74,16 @@ and that Account must be active.  See [About Accounts](Coda_Accounts.md) for mor
 Using `accountquery` you can retrieve or update your account info.  Specify what it is you want it to do using options following
 the `accountquery` command.
 
+Example:
+
+`codaclient.linux ./myconfig.json aq 7548 --full`
+
 #### Options
 
 Parameters | Description
 ---- | ----
 \{accountId} | (Optional) the Account ID to query; if not specified, your own account is retrieved.  Example:  `codaclient.linux -aq 5345`
+--full | Use this option to specify retrieving Reputation History on the account
 
 
 <a name="analyze">
@@ -179,7 +184,8 @@ The Main Configuration File contains configurations pertaining to executing Coda
   "reportPath": "/home/stakepool/reports/coda",
   "prometheusFile": "/home/stakepool/cnode/prometheus/coda.txt",
   "uiOptions": {
-    "menuType": "short"
+    "menuType": "short",
+    "textEditor": "nano"
   },
   "analysis": {
     "lastRunDate": null,
@@ -220,6 +226,7 @@ logging-logPath | Logs will be saved to the file in the specified path; if left 
 analyze | This is an array of Analysis inpt specifications, see below.  Each one of these will be processed in order, or if you specify the names on the command line, only those names will be processed.
 uiOptions | Represents options for the CodaClient user interface.
 uiOptions-menuType | Either `full` or `short` - whether to display shortened menus.
+uiOptions-textEditor | Path to editor bin.
 
 
 IMPORTANT NOTE:  The API Key you receive is private to you, and must not be given out.  It expires after 1 year, or whenever 
@@ -520,4 +527,4 @@ In order to optimize performance, the CodaEA API server caches database items fo
 
 # Other Links
 
-[About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md)
+[About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [About Subscriptions](Subscriptions.md)
