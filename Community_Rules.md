@@ -62,7 +62,7 @@ If the item is found to not be in violation, no further penalty is incurred.
 
 ### Item Reporting Process
 
-![Item Reporting Process](https://github.com/info-tpr/CodaEA/blob/main/ItemREportDataModel.jpg?raw=true)
+![Item Reporting Process](https://github.com/info-tpr/CodaEA/blob/main/ItemReportDataModel.jpg?raw=true)
 
 For each post, one or more users can report it, entering their own comments.  This will create an Item Report, which Moderators will manage by either Confirming or Denying the report.
 
