@@ -60,6 +60,16 @@ If the item is found to not be in violation, no further penalty is incurred.
 
 ![Violation Reporting Process](https://github.com/info-tpr/CodaEA/blob/main/ItemReportProcess.jpg?raw=true)
 
+### Item Reporting Process
+
+![Item Reporting Process](https://github.com/info-tpr/CodaEA/blob/main/ItemREportDataModel.jpg?raw=true)
+
+For each post, one or more users can report it, entering their own comments.  This will create an Item Report, which Moderators will manage by either Confirming or Denying the report.
+
+Moderators will take comments and the original post context into account, and judge whether or not it violates the rules.  If the Moderator agrees, he/she will Confirm the report, and the item will be banned from view.  If the Moderator disagrees, he/she will Deny the report, and the matter is considered settled.
+
+If a post author has a post that is Banned, he/she can appeal, in which case the Item Report will moved to the Appealed state.  A different Moderator must then rule, and that ruling is final.
+
 ## Reputation
 
 - Every time you post (an Error Discussion entry, Troubleshooting Step, or Comments), you are rewarded with 10 points.
