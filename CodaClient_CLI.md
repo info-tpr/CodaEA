@@ -223,7 +223,7 @@ analysis | When you run an error log analysis, you can enable email notification
 logging | This object specifies how CodaClient will log its actions
 logging-logLevel | One of `Off` (no logging), `Error` (Errors only), `Warning` (Errors and Warnings), or `Debug` (All messages)
 logging-logPath | Logs will be saved to the file in the specified path; if left blank, logs will not be saved and only output to stdout
-analyze | This is an array of Analysis inpt specifications, see below.  Each one of these will be processed in order, or if you specify the names on the command line, only those names will be processed.
+analyze | This is an array of Analysis inpt specifications, [see below](#inputspecs).  Each one of these will be processed in order, or if you specify the names on the command line, only those names will be processed.
 uiOptions | Represents options for the CodaClient user interface.
 uiOptions-menuType | Either `full` or `short` - whether to display shortened menus.
 uiOptions-textEditor | Path to editor bin.
@@ -237,6 +237,7 @@ website](https://www.theparallelrevolution.com/Coda).
 IMPORTANT NOTE:  Sending emails requires CodaClient to run under root privileges.  If scheduled as a cron job, it should be
 done in the root account.
 
+<a name="inputspecs" />
 
 ### Analyze Input Specs
 
@@ -258,11 +259,13 @@ Type | Meaning
 ---- | ----
 name | The analysis name you wish to give this analysis.  You can specify which analyses to run on the command line using the `az --analysis=` option.
 input | This specifies the input format processor, as indicated below.
+input: eventlog | Reads Windows event log per specifications
 input: journal | Linux system journal (i.e. use `journalctl` to query)
 input: text/csv | Text, CSV format
 input: text/fixed | Text, fixed width format
 input: text/other | Text, Other delimiter format
 input: text/cardano | Special processor for Cardano-Node JSON text log files
+input: text/regex | Regular Expression pattern matching for line-based text files
 input: &lt;other> | Any other processor represents a plug-in.  Plug-in support will be coming soon.
 inputSpecs | This is an object that contains the specs for the type indicated for `input`.  For example, if `input` is `journal`, then you would use the Journal Specs for `inputSpecs`.
 
@@ -271,22 +274,39 @@ Based on the type specified, the `inputSpecs` will use one of the following form
 IMPORTANT NOTE:  Accessing the System Journal requires root privileges.  If scheduled as a cron job, it should be
 done in the root account.
 
+#### Windows Event Log specs
+
+```
+{
+  "eventLog": "Application",
+  "source": "DockerService",
+  "severity": ["critical","error"]
+}
+```
+
+The `eventlog` source allows you to scan entries from the Windows Event Log and check them against CodaEA.  Since the Event Log is a predefined format, you only need to specify 3 things:
+
+Field | Description
+---- | ----
+eventLog | The event log to query, either `Application`, `Security`, `Setup`, or `System`.
+source | The application source reporting in the Source field.
+severity | Which severities to check - options are `critical`, `error`, `warning`, `information` and `verbose` - although only `critical` and `error` are typically considered worth monitoring.
 
 #### Journal Specs
 
 ```
 {
-  "process": "cardano",
-  "messageType": {
-    "values": ["1","2","3"]
-  }
+  "process": "cardano"
 }
 ```
 
 Field | Description
 ---- | ----
 process | The process reporting to the Journal.  In the example for Cardano network cardano-node is the process for running the blockchain network node.
-messageType | The type of message to query from the Journal; this could be "error", "warning" or "debug".  In the `values` field, place an array of severities you wish to include.
+
+NOTE:  All error messages of severity `Emergency`, `Alert`, `Critical` and `Error` are scanned from the indicated process.
+
+
 
 #### Text/CSV Specs
 
@@ -419,7 +439,7 @@ will ignore the latter fields, while lines that have fewer fields will be ignore
 ----- Following is output from received message:
 ```
 
-For `text/fixed` input type, the `inputSpecs` object must be of the following format:
+For `text/other` input type, the `inputSpecs` object must be of the following format:
 
 ```
 {
@@ -449,7 +469,8 @@ For `text/fixed` input type, the `inputSpecs` object must be of the following fo
     "columnName": "Severity",
     "values": ["Error"],
     "codeColumn": "Code",
-    "messageColumn": "Message"
+    "messageColumn": "Message",
+    "timeColumn": "Date"
   }
 }
 ```
@@ -471,6 +492,7 @@ messageType-columnName | This determines the column to use for which message typ
 messageType-values | A list of values in the above column to analyze.
 messageType-codeColumn | The column used to identify the error code.  This is usually a number, but could also be some kind of alphanumeric identifier.
 messageType-messageColumn | The column used for the message reported from the application.
+messageType-timeColumn | The date/time the log entry was reported
 
 #### Text/cardano Specs
 
@@ -527,4 +549,4 @@ In order to optimize performance, the CodaEA API server caches database items fo
 
 # Other Links
 
-[About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [About Subscriptions](Subscriptions.md)
+[CodaClient Advanced Topics](CodaClient_Advanced.md) | [About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [About Subscriptions](Subscriptions.md)
