@@ -266,7 +266,8 @@ input: text/fixed | Text, fixed width format
 input: text/other | Text, Other delimiter format
 input: text/cardano | Special processor for Cardano-Node JSON text log files
 input: text/regex | Regular Expression pattern matching for line-based text files
-input: &lt;other> | Any other processor represents a plug-in.  Plug-in support will be coming soon.
+input: text/&lt;other> | Any other processor represents a plug-in.  `text/` at the beginning indicates to call the Line Processor method.  What you specify in `other` must match the name you assigned in your [Plugins configuration](Creating%20A%20Plugin.md#plugin_config).
+input: file/&lt;other> | File processor plug-in.  `file/` at the beginning indicates to call the File Processor methods.  What you specify in `other` must match the name you assigned in your [Plugins configuration](Creating%20A%20Plugin.md#plugin_config).
 inputSpecs | This is an object that contains the specs for the type indicated for `input`.  For example, if `input` is `journal`, then you would use the Journal Specs for `inputSpecs`.
 
 Based on the type specified, the `inputSpecs` will use one of the following formats:
