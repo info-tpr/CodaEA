@@ -21,6 +21,6 @@ In order to be able to access the Coda database, you must create and validate an
 There are 3 types of Accounts:  Operator, Organizational Administrator, and Organizational User.  CodaClient is designed for use by an Operator Account.
 
 For further info:
-. | .
+Website | Support
 ---- | ----
-[<img src="https://www.freeiconspng.com/uploads/site-internet-icon-png-10.png" alt="website" width="32" height="32" />](https://www.codaea.io) Website | [<img src="https://user-images.githubusercontent.com/102256700/171919509-b1b7e037-f3c1-4df8-8889-6ba90192718c.png" alt="discord" width="32" height="32" />](https://discord.gg/pxFyPmJd) [<img src="https://th.bing.com/th/id/R.c4e9988fb71cd621c3c71f93e5719055?rik=XdaJ8rN2LBemRQ&pid=ImgRaw&r=0" alt="telegram" width="32" height="32" />](https://t.me/codaea) Support
+[<img src="https://www.freeiconspng.com/uploads/site-internet-icon-png-10.png" alt="website" width="32" height="32" />](https://www.codaea.io) | [<img src="https://user-images.githubusercontent.com/102256700/171919509-b1b7e037-f3c1-4df8-8889-6ba90192718c.png" alt="discord" width="32" height="32" />](https://discord.gg/pxFyPmJd) [<img src="https://th.bing.com/th/id/R.c4e9988fb71cd621c3c71f93e5719055?rik=XdaJ8rN2LBemRQ&pid=ImgRaw&r=0" alt="telegram" width="32" height="32" />](https://t.me/codaea)
