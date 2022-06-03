@@ -23,6 +23,6 @@ There are 3 types of Accounts:  Operator, Organizational Administrator, and Orga
 For further info:
 . | .
 ---- | ----
-[![www](https://www.freeiconspng.com/uploads/site-internet-icon-png-10.png)](https://www.codaea.io) Website | [![discord](![image](https://user-images.githubusercontent.com/102256700/171919509-b1b7e037-f3c1-4df8-8889-6ba90192718c.png)
+[![www](https://www.freeiconspng.com/uploads/site-internet-icon-png-10.png =32x32)](https://www.codaea.io) Website | [![discord](![image](https://user-images.githubusercontent.com/102256700/171919509-b1b7e037-f3c1-4df8-8889-6ba90192718c.png)
 )](https://discord.gg/pxFyPmJd) [![telegram](![image](https://th.bing.com/th/id/R.c4e9988fb71cd621c3c71f93e5719055?rik=XdaJ8rN2LBemRQ&pid=ImgRaw&r=0)
 )](https://t.me/codaea) Support
