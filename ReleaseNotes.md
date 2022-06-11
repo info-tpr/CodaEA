@@ -39,6 +39,20 @@ Robust Error Handling | 2022.1(beta) | Handle all errors from REST server and re
 Feature | Area | Introduced | Description
 ---- | ---- | ---- | ----
 Endpoint Documentation | Docs | 2022.1(beta) | All endpoints are documented via OpenAPI 3.0 specs.  To view documentation, simply navigate browser to the root of the API server URL (e.g. https://test.codaea.io)
+Error Reporting | Errors | 2022.1(beta) | Ability to check error information, report error occurrences, and retrieve related discussion posts.
+Error Metrics | Errors | 2022.1(beta) | Metrics captured on error occurrences.
+Reputation Points | Reputation | 2022.1(beta) | All badges and reputation points assigned automatically through posting and participation as indicated in Badge prerequisites.
+Subscriptions | Subscriptions | 2022.1(beta) | Errors reported by CodaClient are subscribed to for updates.  Votes and other activities on your Posts are also subscribed to.
+Database Caching | Database | 2022.1(beta) | Implemented enterprise-level database record caching to reduce load on Database Server.
+
+## Job Processor Server
+
+Feature | Area | Introduced | Description
+---- | ---- | ---- | ----
+Account Validation Emails | Emails | 2022.1(beta) | System sends Account Validation emails with links to enable new Accounts
+Account Expiration Emails | Emails | 2022.1(beta) | Sends email notices on expiring Accounts.
+Subscription Emails | Emails | 2022.1(beta) | System sends consolidated Subscription emails with all activity since last Subscription email in a table
+Purge Old Data | Cleanup | 2022.1(beta) | Old emails, abandoned Accounts, and such are removed after a reasonable period of time.
 
 # Change Log
 
