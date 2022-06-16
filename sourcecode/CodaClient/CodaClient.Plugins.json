@@ -1,0 +1,10 @@
+{
+  "acmecorp": {
+    "description": "Acme Corp Log Processor",
+    "github": "https://github.com/acmecorp",
+    "pluginId": null,
+    "className": "AcmeCorp.CodaPlugin.Class1",
+    "version": "",
+    "publisher": ""
+  }
+}

@@ -1,0 +1,11 @@
+﻿<thead>
+  <tr>
+    <th class="tg-ifi7" colspan="3"><span style="font-weight:bold;font-style:italic">[Action]</span></th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-gdc4">Error Code</td>
+    <td class="tg-46ru"># Occurrences</td>
+    <td class="tg-4aw5">Details</td>
+  </tr>

@@ -1,0 +1,60 @@
+{
+  // Put this in the CodaClient_Plugins.json
+  "CodaSQL": {
+    "description": "Official CodaEA SQL Server Plugin",
+    "github": "https://github.com/info-tpr/CodaEA",
+    "pluginId": null,
+    "className": "CodaEA.SQLServer.Plugin",
+    "version": "2022.1",
+    "publisher": "The Parallel Revolution LLC"
+  },
+
+
+  /*============================
+  This config fragment shows an example of how to configure an Analyze setting to query a Stored Procedure.
+  */
+  "analyze": [
+    {
+      "name": "MySQLLogQuery",
+      // Assume PlugIn is configured under the name CodaSQL
+      "input": "file/CodaSQL",
+      "messageType": {
+        // Filter for result types matching "Error"
+        "values": [ "Error", "Critical" ]
+      },
+      "inputSpecs": {
+        "inputFile": "",
+        "server": "SQL2019P01",
+        "database": "coolapp1",
+        "user": "coolapp_user",
+        "password": "68@gdgF9(",
+        "integratedSecurity": "false",
+        // queryType: Text, Table, or StoredProcedure
+        "queryType": "StoredProcedure",
+        // text: (queryType == Text, SQL commands; 
+        //    queryType == Table, Table Name; 
+        //    queryType == StoredProcedure, Procedure Name
+        "text": "SP_GET_ERRORLOG_SINCE_DATE",
+        // List of parameter names and values; type need not be specified
+        "parameters": [
+          {
+            "name": "@startDateParam",
+            // Note special value $LAST_RUN_DATE, plugin will convert to last run date or null
+            "value": "$LAST_RUN_DATE"
+          }
+        ],
+        // Result fields (SQL column names) go in the order:
+        //  1. Date
+        //  2. Message Type (e.g. Error, Warning, Debug...)
+        //  3. Code
+        //  4. Message
+        "fields": [
+          "date",
+          "type",
+          "errorcode",
+          "description"
+        ]
+      }
+    }
+  ]
+}

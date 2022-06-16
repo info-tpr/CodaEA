@@ -1,0 +1,46 @@
+{
+  "network": "cardano",
+  "currentVersion": "1.33.0",
+  // Replace with prod.codaea.io when available
+  "apiserver": "https://test.codaea.io",
+  "apikey": "paste-your-api-key-here",
+  "maximumSeverity": 1,
+  "reportPath": "/home/stakepool/coda/reports/coda_analysis.json",
+  "prometheusFile": "/home/stakepool/coda/prometheus/coda.txt",
+  "uiOptions": {
+    "menuType": "full",
+    // Use Notepad.exe or your favorite editor on Windows environments; or leave blank for built-in basic text entry.
+    "textEditor": "nano"
+  },
+  "analysis": {
+    "lastRunDate": null,
+    // Set to True to get notified of important analysis results
+    "notification": false,
+    // Fill in your SMTP connection info
+    "smtpFromName": "CodaClient",
+    "smtpServer": "smtp.gmail.com",
+    "smtpPort": 25,
+    "smtpAccount": "cardano@gmail.com",
+    "smtpPassword": "68cr6t%T25ti!",
+    "smtpUseSSL": true,
+    "sendToAddress": "notify@myorg.com"
+  },
+  "logging": {
+    "logLevel": "Warning",
+    "logPath": "codaclient.log"
+  },
+  "analyze": [
+    {
+      "name": "node-log",
+      "input": "text/cardano",
+      "messageType": {
+        "values": [ "Error" ]
+      },
+      "inputSpecs": {
+        "inputFile": "/home/stakepool/cnode/logs/cardano-node.log",
+        "type": "error",
+        "maximumSeverity": 1
+      }
+    }
+  ]
+}
