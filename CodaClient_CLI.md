@@ -43,10 +43,10 @@ Testnet:  https://test.codaea.io
 ## Command Line Parameters
 Syntax:
 
-`    codaclient.<os> <path-to-config-file> <command> <command-options>`
+`    CodaClient <path-to-config-file> <command> <command-options>`
 
 Example:
-`    codaclient.linux ./cardano-config.json az`
+`    CodaClient ./cardano-config.json az`
 
     <os>:  Supported Operating Systems are Linux (Ubuntu 20.04 LTS)
 
@@ -542,6 +542,45 @@ IMPORTANT NOTE:  For `text/cardano` processing, you must configure your cardano-
 For example, if you wish your log file to be /home/stakepool/cnode/logs/cardano-node.log then place that in the 2 entries where it says `{path-to-log-file}`.  Also, it is *very important* to use `ScJson` as the format, and *not* `ScText`.
 
 Restart your node after making changes to the mainnet-config.  It is recommended that you run your node as a systemd unit that autostarts on system startup, and not as a process spawned from a shell.
+
+#### Log Directory Cleanup
+
+On all `inputSpecs` objects, you can optionally define cleanup parameters using the following elements:
+
+Element | Example | Description
+---- | :----: | ----
+cleanAgeDays | 14 | Number of days old after which to remove files
+cleanFilePattern | logfile-* | File name pattern of files to remove
+
+Any file in the same folder as the `inputFile` that has a modification date older than that specified in `cleanAgeDays` will be removed after the log file has been analyzed.
+
+For example:
+
+```
+{
+...
+  "analyze": [
+    {
+      "name": "my-test-log",
+      "input": "text/cardano",
+      "messageType": {
+        "values": [ "Error", "Critical" ]
+      },
+      "inputSpecs": {
+        "inputFile": "/home/stakepool/cnode/logs/cardano-node.log",
+        "cleanFolder": true,
+        "cleanSettings": {
+          "cleanAgeDays": 14,
+          "cleanFilePattern": "cardano-node*"
+        }
+      },
+      "type": "error",
+      "maximumSeverity": 1
+    }
+  ]
+...
+}
+```
 
 ## Important Notes and Considerations
 
