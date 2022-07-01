@@ -1,10 +1,10 @@
 {
-  "acmecorp": {
-    "description": "Acme Corp Log Processor",
-    "github": "https://github.com/acmecorp",
+  "CodaSQL": {
+    "description": "Official CodaEA SQL Server Plugin",
+    "github": "https://github.com/info-tpr/CodaEA/tree/main/sourcecode/CodaEA.SQLServer",
     "pluginId": null,
-    "className": "AcmeCorp.CodaPlugin.Class1",
-    "version": "",
-    "publisher": ""
+    "className": "CodaEA.SQLServer.Plugin",
+    "version": "2022.1",
+    "publisher": "The Parallel Revolution LLC"
   }
 }

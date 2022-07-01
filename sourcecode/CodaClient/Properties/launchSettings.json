@@ -2,7 +2,7 @@
   "profiles": {
     "codaclient.linux": {
       "commandName": "Project",
-      "commandLineArgs": "E:\\Data\\dotNetDev\\codaea\\CodaRESTServer\\Misc\\TestCases\\test-config.json eq --code=3580 --full"
+      "commandLineArgs": "E:\\Data\\dotNetDev\\codaea\\CodaRESTServer\\Misc\\TestCases\\test-config.json az"
     }
   }
 }

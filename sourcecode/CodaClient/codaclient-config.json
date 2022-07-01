@@ -1,0 +1,22 @@
+{
+  "network": "cardano",
+  "apiserver": "https://127.0.0.1:44320",
+  "apiserver2": "https://76.112.108.182",
+  "apikey": "your-api-key-here",
+  "analysis": {
+    "notification": true,
+    "smtpServer": "smtp.gmail.com",
+    "smtpPort": 25,
+    "smtpAccount": "cardano@gmail.com",
+    "smtpPassword": "68cr6t%T25ti!",
+    "smtpUseSSL": true,
+    "sendToAddress": "notify@myorg.com"
+  },
+  "logging": {
+    "logLevel": "Debug",
+    "logPath": "codaclient.log"
+  },
+  "analyze": [
+
+  ]
+}

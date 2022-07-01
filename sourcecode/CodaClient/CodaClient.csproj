@@ -5,6 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <StartupObject>codaclient.classes.Program</StartupObject>
 	<Nullable>enable</Nullable>
+	<AssemblyVersion>2022.1.2</AssemblyVersion>
+	<FileVersion>2022.1.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,6 +44,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="plugins\AcmeCorp.CodaPlugin.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="plugins\CodaEA.SQLServer.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="plugins\CodaEA.SQLServer.ExampleConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="plugins\Readme.txt">

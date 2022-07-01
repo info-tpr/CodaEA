@@ -494,7 +494,11 @@ namespace CodaRESTClient
         {
             var request = NewRequest("/api/account/mailme", Method.Put);
             request.AddHeader("subject", Subject);
-            request.AddBody(Body);
+            var bodyData = new JObject()
+            {
+                ["body"] = Body,
+            };
+            request.AddBody(bodyData.ToString(Newtonsoft.Json.Formatting.None), "text/json");
             return GetResponse(request);
         }
 

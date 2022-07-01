@@ -279,19 +279,19 @@ namespace codaclient.classes
             CConsole.WriteLine($"CodaEA Client for Linux, MacOS, Windows -- {"(c) 2022 The Parallel Revolution":green}");
             CConsole.WriteLine();
             CConsole.WriteLine($"{"USAGE:":white}");
-            CConsole.WriteLine($"    {"codaclient.linux ":darkgray}{{path-to-config-file}} {{command}} {{command-options}}");
-            CConsole.WriteLine($"  {"Where:":darkgray}");
-            CConsole.WriteLine($"    {"{path-to-config-file}":white}  {"- Specifies path to JSON config file":darkgray}");
-            CConsole.WriteLine($"    {"{command}:":white} {"(See":darkgray} {"https://github.com/info-tpr/CodaEA":blue} {"for full command documentation)":darkgray}");
-            CConsole.WriteLine($"        {"accountquery | aq":white}  {"- Query your account":darkgray}");
-            CConsole.WriteLine($"        {"analyze | az":white}       {"- Analyze application logs according to the configuration options.  This can query the":darkgray}");
-            CConsole.WriteLine($"                             {"system Journal, or a text log file with delimiters or fixed-width columns.  Entries":darkgray}");
-            CConsole.WriteLine($"                             {"are submitted to CodaEA, and the analysis results (meaning & severity) are stored in":darkgray}");
-            CConsole.WriteLine($"                             {"a report file, which can be viewed with a web browser or text editor.  Metrics output":darkgray}");
-            CConsole.WriteLine($"                             {"in Prometheus format, and email notifications can be configured to help monitor and":darkgray}");
-            CConsole.WriteLine($"                             {"respond to critical issues.":darkgray}");
-            CConsole.WriteLine($"        {"errorquery | eq":white}    {"- Query the CodaEA server for a specific error code, and examine its community feedback.":darkgray}");
-            CConsole.WriteLine($"        {"errorupdate | eu":white}   {"- Update the error with specified analysis":darkgray}");
+            CConsole.WriteLine($"    {"codaclient.linux ":gray}{{path-to-config-file}} {{command}} {{command-options}}");
+            CConsole.WriteLine($"  {"Where:":gray}");
+            CConsole.WriteLine($"    {"{path-to-config-file}":white}  {"- Specifies path to JSON config file":gray}");
+            CConsole.WriteLine($"    {"{command}:":white} {"(See":gray} {"https://github.com/info-tpr/CodaEA":blue} {"for full command documentation)":gray}");
+            CConsole.WriteLine($"        {"accountquery | aq":white}  {"- Query your account":gray}");
+            CConsole.WriteLine($"        {"analyze | az":white}       {"- Analyze application logs according to the configuration options.  This can query the":gray}");
+            CConsole.WriteLine($"                             {"system Journal, or a text log file with delimiters or fixed-width columns.  Entries":gray}");
+            CConsole.WriteLine($"                             {"are submitted to CodaEA, and the analysis results (meaning & severity) are stored in":gray}");
+            CConsole.WriteLine($"                             {"a report file, which can be viewed with a web browser or text editor.  Metrics output":gray}");
+            CConsole.WriteLine($"                             {"in Prometheus format, and email notifications can be configured to help monitor and":gray}");
+            CConsole.WriteLine($"                             {"respond to critical issues.":gray}");
+            CConsole.WriteLine($"        {"errorquery | eq":white}    {"- Query the CodaEA server for a specific error code, and examine its community feedback.":gray}");
+            CConsole.WriteLine($"        {"errorupdate | eu":white}   {"- Update the error with specified analysis":gray}");
         }
 
         /// <summary>

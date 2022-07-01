@@ -15,15 +15,7 @@
   "analysis": {
     "lastRunDate": null,
     // Set to True to get notified of important analysis results
-    "notification": false,
-    // Fill in your SMTP connection info
-    "smtpFromName": "CodaClient",
-    "smtpServer": "smtp.gmail.com",
-    "smtpPort": 25,
-    "smtpAccount": "cardano@gmail.com",
-    "smtpPassword": "68cr6t%T25ti!",
-    "smtpUseSSL": true,
-    "sendToAddress": "notify@myorg.com"
+    "notification": true
   },
   "logging": {
     "logLevel": "Warning",
@@ -38,6 +30,14 @@
       },
       "inputSpecs": {
         "inputFile": "/home/stakepool/cnode/logs/cardano-node.log",
+        // Whether or not to clean (purge) old files from the folder
+        "cleanFolder": true,
+        // If 'cleanFolder' is 'true', then this specifies clean settings
+        "cleanSettings": {
+          "cleanAgeDays": 14,
+          // OS file pattern match
+          "cleanFilePattern": "cardano-node-*"
+        },
         "type": "error",
         "maximumSeverity": 1
       }

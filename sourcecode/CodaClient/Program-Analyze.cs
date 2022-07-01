@@ -93,6 +93,7 @@ namespace codaclient.classes
             foreach (JObject logSource in LogsToAnalyze)
             {
                 AnalyzeSource(Configuration, logSource, errorAnalysis, CodaClient, errorLogs);
+                CleanLogFolder(Configuration, logSource);
             }
             ReportErrorsToCoda(Configuration, CodaClient, errorAnalysis, errorLogs);
             SaveCachedItems(Configuration, errorLogs);
@@ -101,6 +102,54 @@ namespace codaclient.classes
             ReportNodeExporterStats(Configuration, prometheusStats, errorAnalysis);
             SendMailNotices(Configuration, errorAnalysis, CodaClient);
             Configuration["analysis"]!["lastRunDate"] = DateTime.UtcNow;
+        }
+
+        private static void CleanLogFolder(JObject Configuration, JObject logSource)
+        {
+            var logSettings = (JObject)logSource["inputSpecs"]!;
+            if (!logSettings.ContainsKey("cleanFolder"))
+            {
+                return;
+            }
+            if (Convert.ToBoolean(logSettings["cleanFolder"]))
+            {
+                var logFolder = Path.GetDirectoryName($"{logSettings["inputFile"]}");
+                if (logFolder is not null)
+                {
+                    if (!logSettings.ContainsKey("cleanSettings"))
+                    {
+                        LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "CLG-0002", "ERROR: Log folder cleaning enabled, but not configured with 'cleanSettings' object", ErrorLogSeverityEnum.Error);
+                    }
+                    else
+                    {
+                        var cleanSettings = (JObject)logSettings["cleanSettings"]!;
+                        if (!cleanSettings.ContainsKey("cleanFilePattern") || !cleanSettings.ContainsKey("cleanAgeDays"))
+                        {
+                            LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "CLG-0005", "ERROR: Malformed 'cleanSettings' does not contain cleanAgeDays or cleanFilePattern", ErrorLogSeverityEnum.Error);
+                            return;
+                        }
+                        LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "CLG-0001", $"Cleaning log folder '{logFolder}'", ErrorLogSeverityEnum.Debug);
+                        var di = new DirectoryInfo(logFolder);
+                        var files = di.EnumerateFiles($"{cleanSettings["cleanFilePattern"]}");
+                        foreach (var file in files)
+                        {
+                            var ts = DateTime.Now.Subtract(file.LastWriteTime);
+                            if (ts.TotalDays > Convert.ToInt16(cleanSettings["cleanAgeDays"]))
+                            {
+                                try
+                                {
+                                    LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "CLG-0003", $"--- Deleting file: {file.Name}...", ErrorLogSeverityEnum.Debug);
+                                    file.Delete();
+                                }
+                                catch (Exception ex)
+                                {
+                                    LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "CLG-0004", $"WARNING: Unable to delete file: {ex.Message}", ErrorLogSeverityEnum.Warning);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -166,10 +215,11 @@ namespace codaclient.classes
                 var subject = "Error Analysis Has Produced Known Issues";
                 var body = new StringBuilder();
                 body.Append("<h1>The following errors were found on your system in the latest run:</h1><br/><br/>");
+                body.Append($"Source: {Environment.MachineName}<br/>");
                 string errorTable = GenerateErrorTable(ErrorAnalysis);
                 body.Append(errorTable);
                 LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "INFO-0006", "Queueing Analysis email on server...", ErrorLogSeverityEnum.Debug);
-                var result = CodaClient.MailMe(subject, body.ToString());
+                var result = CodaClient.MailMe(subject, $"{body}");
                 if (result.ContainsKey("code"))
                 {
                     ShowErrorMessage(result, false);
@@ -203,17 +253,20 @@ namespace codaclient.classes
                 {
                     ["Action"] = sev,
                 };
-                sb.Append(ClientUtilities.FillTextTemplate("Mail-notification-tablesectionhead.txt", sectionData, Client.PathSeparator));
-                foreach (var err in errorAnalysis[sev].Errors.Values)
+                if (errorAnalysis.ContainsKey(severity))
                 {
-                    var meaning = String.IsNullOrEmpty(err.AcceptedMeaning) ? err.AcceptedMeaning : "Unknown";
-                    var errData = new JObject()
+                    sb.Append(ClientUtilities.FillTextTemplate("Mail-notification-tablesectionhead.txt", sectionData, Client.PathSeparator));
+                    foreach (var err in errorAnalysis[severity].Errors.Values)
                     {
-                        ["ErrorCode"] = err.ErrorCode,
-                        ["Number"] = err.NumberOccurrences,
-                        ["Details"] = meaning,
-                    };
-                    sb.Append(ClientUtilities.FillTextTemplate("Mail-notification-tablerow.txt", errData, Client.PathSeparator));
+                        var meaning = String.IsNullOrEmpty(err.AcceptedMeaning) ? err.AcceptedMeaning : "Unknown";
+                        var errData = new JObject()
+                        {
+                            ["ErrorCode"] = err.ErrorCode,
+                            ["Number"] = err.NumberOccurrences,
+                            ["Details"] = meaning,
+                        };
+                        sb.Append(ClientUtilities.FillTextTemplate("Mail-notification-tablerow.txt", errData, Client.PathSeparator));
+                    }
                 }
             }
             sb.Append(ClientUtilities.FillTextTemplate("Mail-notification-tablefoot.txt", null, Client.PathSeparator));
@@ -335,26 +388,13 @@ namespace codaclient.classes
         private static void GenerateAnalysisReport(JObject Configuration, SerializableDictionary<string, ErrorAnalysis> ErrorAnalysis)
         {
             LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "INFO-0008", "Generating Analysis Report...", ErrorLogSeverityEnum.Debug);
-            var reportFile = $"{Configuration["reportPath"]}";
+            var reportFileCfg = $"{Configuration["reportPath"]}";
+            var reportFileBase = Path.GetFileNameWithoutExtension(reportFileCfg);
+            var reportExt = Path.GetFileNameWithoutExtension(reportFileCfg);
+            var reportFile = $"{reportFileBase}_{DateTime.Now:yyyy-MM-dd-hh-mm}.{reportExt}";
             var fw = new StreamWriter(reportFile);
-            fw.Write(JsonConvert.SerializeObject(ErrorAnalysis).ToString());
+            fw.Write(JObject.Parse(JsonConvert.SerializeObject(ErrorAnalysis).ToString()).ToString(Newtonsoft.Json.Formatting.Indented));
             fw.Close();
-            /* ----
-            var appdir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            
-            var report = new XmlDocument();
-            var pi = report.CreateProcessingInstruction(
-                "xml-stylesheet",
-                $"type=\"text/xsl\" href=\"{appdir}/CodaReports.xslt\"");
-            report.AppendChild(pi);
-            var nav = report.CreateNavigator();
-            using (var writer = nav.AppendChild())
-            {
-                var ser = new XmlSerializer(ErrorAnalysis.GetType());
-                ser.Serialize(writer, ErrorAnalysis);
-            }
-            report.Save(reportFile);
-            ---- */
         }
 
         /// <summary>
@@ -659,7 +699,7 @@ namespace codaclient.classes
                     List<string>? msgTypes = null;
                     if (msgTypeList is not null)
                     {
-                        msgTypeList.ToObject<List<string>>(); 
+                        msgTypeList.ToObject<List<string>>();
                     }
                     // Loop through the log file
                     while (!PluginAssembly.EndOfStream)
