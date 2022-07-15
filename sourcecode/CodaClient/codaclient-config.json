@@ -2,7 +2,7 @@
   "network": "cardano",
   "apiserver": "https://127.0.0.1:44320",
   "apiserver2": "https://76.112.108.182",
-  "apikey": "your-api-key-here",
+  "apikey": "a5147f83b4ef4b2d9cc4faa898d0fa39795ee99ebe4a4c8884317a12bc53a632",
   "analysis": {
     "notification": true,
     "smtpServer": "smtp.gmail.com",

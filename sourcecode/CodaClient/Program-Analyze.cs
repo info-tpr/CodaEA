@@ -389,9 +389,10 @@ namespace codaclient.classes
         {
             LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "INFO-0008", "Generating Analysis Report...", ErrorLogSeverityEnum.Debug);
             var reportFileCfg = $"{Configuration["reportPath"]}";
+            var reportFolder = Path.GetDirectoryName(reportFileCfg);
             var reportFileBase = Path.GetFileNameWithoutExtension(reportFileCfg);
-            var reportExt = Path.GetFileNameWithoutExtension(reportFileCfg);
-            var reportFile = $"{reportFileBase}_{DateTime.Now:yyyy-MM-dd-hh-mm}.{reportExt}";
+            var reportExt = Path.GetExtension(reportFileCfg);
+            var reportFile = $"{reportFolder}{CodaRESTClient.Client.PathSeparator}{reportFileBase}_{DateTime.Now:yyyy-MM-dd-hh-mm}{reportExt}";
             var fw = new StreamWriter(reportFile);
             fw.Write(JObject.Parse(JsonConvert.SerializeObject(ErrorAnalysis).ToString()).ToString(Newtonsoft.Json.Formatting.Indented));
             fw.Close();

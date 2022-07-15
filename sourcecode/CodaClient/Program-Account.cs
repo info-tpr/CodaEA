@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace codaclient.classes
 {
-    public partial class Program
+    partial class Program
     {
         private static void AccountQuery(string Breadcrumbs, JObject Configuration, string[] Args, CodaRESTClient.Client CodaClient, JObject myAccount)
         {
@@ -55,6 +55,10 @@ namespace codaclient.classes
                 {
                     menu += " U)pdate D)eactivate G)en New Key A)dmin toggle";
                 }
+            }
+            else if (MyAccount["accountId"] == QueryAccount["accountId"])
+            {
+                menu += " U)pdate G)en New Key";
             }
             if (CodaClient.AccountHasBadge(QueryAccount, "OR", "*") || CodaClient.AccountHasBadge(QueryAccount, "DV", $"{Configuration["network"]}"))
             {

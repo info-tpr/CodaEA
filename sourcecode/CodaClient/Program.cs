@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using CodaRESTClient;
 using Newtonsoft.Json.Linq;
 
 namespace codaclient.classes
@@ -19,17 +21,22 @@ namespace codaclient.classes
 
         static void Main(string[] args)
         {
+            bool isInteractive = false;
+            JObject? configuration = null;
             if (args.Length < 2)
             {
+                isInteractive = true;
                 ShowUsage();
+                CheckForUpdate(configuration, isInteractive, null);
                 return;
             }
             if (args.ToList<string>().Contains("--?") || args.ToList<string>().Contains("--help") || args.ToList<string>().Contains("--h"))
             {
+                isInteractive |= true;
                 ShowUsage();
+                CheckForUpdate(configuration, isInteractive, null);
                 return;
             }
-            JObject? configuration = null;
             try
             {
                 LogMessage(configuration, MethodBase.GetCurrentMethod()!.Name, "START-0003", $"Running on {CodaRESTClient.Client.TargetOS}.  Loading config...", ErrorLogSeverityEnum.Debug);
@@ -68,14 +75,17 @@ namespace codaclient.classes
                 {
                     case "accountquery":
                     case "aq":
+                        isInteractive = true;
                         AccountQuery("AccountQuery/", configuration, args, client, myAccount);
                         break;
                     case "errorquery":
                     case "eq":
+                        isInteractive = true;
                         ErrorQuery("ErrorQuery/", configuration, args, client, myAccount);
                         break;
                     case "errorupdate":
                     case "eu":
+                        isInteractive = true;
                         ErrorUpdate(configuration, args, client);
                         break;
                     case "analyze":
@@ -83,6 +93,7 @@ namespace codaclient.classes
                         AnalyzeLogs(configuration, args, client);
                         break;
                     default:
+                        isInteractive = true;
                         ShowUsage();
                         break;
                 }
@@ -93,6 +104,7 @@ namespace codaclient.classes
                         MergePrometheusFiles(configuration, arg);
                     }
                 }
+                CheckForUpdate(configuration, isInteractive, client);
                 SaveConfig(args[0], configuration);
             }
             catch (Exception ex)
@@ -277,9 +289,9 @@ namespace codaclient.classes
         private static void ShowUsage()
         {
             CConsole.WriteLine($"CodaEA Client for Linux, MacOS, Windows -- {"(c) 2022 The Parallel Revolution":green}");
-            CConsole.WriteLine();
+            CConsole.WriteLine($"version {Assembly.GetExecutingAssembly().GetName().Version!}");
             CConsole.WriteLine($"{"USAGE:":white}");
-            CConsole.WriteLine($"    {"codaclient.linux ":gray}{{path-to-config-file}} {{command}} {{command-options}}");
+            CConsole.WriteLine($"    {"CodaClient ":gray}{{path-to-config-file}} {{command}} {{command-options}}");
             CConsole.WriteLine($"  {"Where:":gray}");
             CConsole.WriteLine($"    {"{path-to-config-file}":white}  {"- Specifies path to JSON config file":gray}");
             CConsole.WriteLine($"    {"{command}:":white} {"(See":gray} {"https://github.com/info-tpr/CodaEA":blue} {"for full command documentation)":gray}");
@@ -300,7 +312,7 @@ namespace codaclient.classes
         /// <param name="Configuration"></param>
         /// <param name="Menu"></param>
         /// <returns></returns>
-            private static string ShowMenu(JObject Configuration, string Menu)
+        private static string ShowMenu(JObject Configuration, string Menu)
         {
             string retVal;
             var menuType = $"{Configuration["uiOptions"]!["menuType"]}".ToLower();
@@ -457,6 +469,90 @@ namespace codaclient.classes
                 }
             }
             return retVal + "?";
+        }
+
+        private static string CleanBytes(byte[] Bytes)
+        {
+            var retVal = System.Text.Encoding.Default.GetString(Bytes);
+            for (int x = 0; x < Bytes.Length; x++)
+            {
+                if (retVal[x] == '\n' || retVal[x] == '\0')
+                {
+                    return retVal.Substring(0, x);
+                }
+            }
+            return retVal;
+        }
+
+        private static string GetURLDocument(string URL)
+        {
+            using var webclient = new HttpClient();
+            var result = webclient.GetAsync(URL);
+            result.Wait();
+            Stream str = result.Result.Content.ReadAsStream();
+            byte[] bytes = new byte[50];
+            str.Read(bytes, 0, 49);
+            return CleanBytes(bytes);
+        }
+
+        private static void CheckForUpdate(JObject? Configuration, bool IsInteractive, Client? CodaClient)
+        {
+            var thisVer = $"{Assembly.GetExecutingAssembly().GetName().Version!}";
+            {
+                try
+                {
+                    string currentVer = GetURLDocument("https://raw.githubusercontent.com/info-tpr/CodaEA/main/binaries/codaclient_latestversion");
+                    if (String.IsNullOrEmpty(currentVer))
+                    {
+                        CConsole.WriteLine($"{"ERROR:  Internet connection not available.":red}");
+                    }
+                    else
+                    {
+                        if (currentVer.Trim() != thisVer)
+                        {
+                            // Versions are different; notify once a day
+                            var dow = $"{DateTime.Now.DayOfWeek}";
+                            string dowLast;
+                            if (Configuration is null)
+                            {
+                                dowLast = "none";
+                            }
+                            else
+                            {
+                                if (Configuration.ContainsKey("dayCheckedForUpdate"))
+                                {
+                                    dowLast = $"{Configuration["dayCheckedForUpdate"]}";
+                                }
+                                else
+                                {
+                                    dowLast = $"{DateTime.Now.AddDays(-1).DayOfWeek}";
+                                }
+                            }
+                            if (dow != dowLast)
+                            {
+                                if (IsInteractive)
+                                {
+                                    Console.WriteLine();
+                                    CConsole.WriteLine($"{"Warning!":red}");
+                                    Pause($"A new version of CodaClient is available.  You are running {thisVer}; version {currentVer} is in GitHub.  Press ENTER to continue.");
+                                }
+                                else
+                                {
+                                    if (CodaClient is not null)
+                                    {
+                                        CodaClient.MailMe($"CodaClient needs to be updated on {Environment.MachineName}",
+                                            $"A new version of CodaClient is available.  You are running {thisVer}; version {currentVer} is in GitHub.");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    CConsole.WriteLine($"{"ERROR:  Internet connection not available.":red}");
+                }
+            }
         }
     }
 }
