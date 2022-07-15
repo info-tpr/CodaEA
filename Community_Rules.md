@@ -6,7 +6,7 @@ CodaEA is a simple yet sophisticated environment, designed to reward active memb
 
 In order to promote loyalty and a sense of community value, we established a system of rewards that works as follows.
 
-Also, please note that the content built up in CodaEA is a combination of language from software developers and users, and not from CodaEA or its employees.  As such, we are not responsible for that content, whether it may violate personal feelings or laws of any kind.  We will not be held responsible for that, and will make best effort to make any corrections that are brought to our attention.  But we will not monitor the data for any violations - it is up to the Community to self-manage, and bring it to our attention when they can't.
+==Also, please note that the content built up in CodaEA is a combination of language from software developers and users, and not from CodaEA or its employees.  As such, we are not responsible for that content, whether it may violate personal feelings or laws of any kind.  We will not be held responsible for that, and will make best effort to make any corrections that are brought to our attention.  But we will not monitor the data for any violations - it is up to the Community to self-manage, and bring it to our attention when they can't.==
 
 ## Etiquette
 
@@ -97,7 +97,7 @@ Commentator|CT|Comment on 10 posts
 Developer|DV|Accounts that belong to a software developer.  A Developer is allowed to manage errors and error analysis in their Network domain.
 Developer Admin|DA|Accounts that belong to a software developer, who can create and manage DV accounts belonging to them.
 Error Editor|EE|Earned by community participation, allowed to update error details
-Error Finder|EF|Found your first error new to Coda
+Error Finder|EF|Found your first error
 Epic|EP|Earn 200 daily reputation 20 times
 Good Answer|GA|Post a Troubleshooting tip that gets voted up 25 or more times
 Gold Member|GO|Achieve 15000 Reputation
