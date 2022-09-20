@@ -1,4 +1,4 @@
-﻿![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true)
+![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true)
 
 # Community Rules
 
@@ -88,31 +88,31 @@ The assignment of a Badge by the system also awards you 100 Reputation Points.
 
 And, coming by the end of the year, for each of the badges you have earned, you will receive an NFT deposited into the payment wallet on record.
 
-Badge Name|Badge Code|Badge Description
-----|----|----
-Advisor|AV|Post 10 Troubleshooting suggestions that are voted up at least once
-Bronze Member|BZ|Achieve 3000 Reputation
-Contributor|CO|Post at least one Discussion or Troubleshooting Tip
-Commentator|CT|Comment on 10 posts
-Developer|DV|Accounts that belong to a software developer.  A Developer is allowed to manage errors and error analysis in their Network domain.
-Developer Admin|DA|Accounts that belong to a software developer, who can create and manage DV accounts belonging to them.
-Error Editor|EE|Earned by community participation at 2000 Reputation in a Network, allowed to update error details
-Error Finder|EF|Found your first error
-Epic|EP|Earn 200 daily reputation 20 times
-Good Answer|GA|Post a Troubleshooting tip that gets voted up 25 or more times
-Gold Member|GO|Achieve 15000 Reputation
-Great Answer|GT|Post a Troubleshooting tip that gets voted up 10 or more times
-Legendary|LG|Earn 200 daily reputation 50 times
-Moderator|MD|Earned by community participation, allowed to update other user's answers for accuracy
-Mythic|MT|Earn 200 reputation in 1 day
-Organization Administrator|OA|Assigned to an Organization (Corporate) account, or assigned by an existing OA to an employee account controlled by the Organization Account.
-Organization|OR|Assigned to an Organization Account to idenfiy it as being able to own other Accounts.
-Pundit|PD|Leave 10 comments with score of 5 or more
-Promoter|PM|Post your first bounty on an Error Message
-Platinum Member|PT|Achieve 25000 Reputation
-System Administrator|SA|Full privileges via API
-Silver Member|SV|Achieve 8000 Reputation
-Yearling|YL|Earn at least 2000 reputation, active for 1 year
+Badge Name|Badge Code|Badge Description|Rep Earned
+----|:----:|----|:----:
+Advisor|AV|Post 10 Troubleshooting suggestions that are voted up at least once|100
+Bronze Member|BZ|Achieve 3000 Reputation|100
+Contributor|CO|Post at least one Discussion or Troubleshooting Tip|100
+Commentator|CT|Comment on 10 posts|100
+Developer|DV|Accounts that belong to a software developer.  A Developer is allowed to manage errors and error analysis in their Network domain.|N/A
+Developer Admin|DA|Accounts that belong to a software developer, who can create and manage DV accounts belonging to them.|N/A
+Error Editor|EE|Earned by community participation at 2000 Reputation in a Network, allowed to update error details|100
+Error Finder|EF|Found your first error|150
+Epic|EP|Earn 200 daily reputation 20 times|200
+Good Answer|GA|Post a Troubleshooting tip that gets voted up 25 or more times|200
+Gold Member|GO|Achieve 15000 Reputation|100
+Great Answer|GT|Post a Troubleshooting tip that gets voted up 10 or more times|150
+Legendary|LG|Earn 200 daily reputation 50 times|200
+Moderator|MD|Earned by community participation, allowed to update other user's answers for accuracy|500
+Mythic|MT|Earn 200 reputation in 1 day|100
+Organization Administrator|OA|Assigned to an Organization (Corporate) account, or assigned by an existing OA to an employee account controlled by the Organization Account.|N/A
+Organization|OR|Assigned to an Organization Account to idenfiy it as being able to own other Accounts.|N/A
+Pundit|PD|Leave 10 comments with score of 5 or more|100
+Promoter|PM|Post your first bounty on an Error Message|100
+Platinum Member|PT|Achieve 25000 Reputation|100
+System Administrator|SA|Full privileges via API|N/A
+Silver Member|SV|Achieve 8000 Reputation|100
+Yearling|YL|Earn at least 2000 reputation, active for 1 year|100
 
 
 
