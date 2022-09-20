@@ -96,7 +96,7 @@ Contributor|CO|Post at least one Discussion or Troubleshooting Tip
 Commentator|CT|Comment on 10 posts
 Developer|DV|Accounts that belong to a software developer.  A Developer is allowed to manage errors and error analysis in their Network domain.
 Developer Admin|DA|Accounts that belong to a software developer, who can create and manage DV accounts belonging to them.
-Error Editor|EE|Earned by community participation, allowed to update error details
+Error Editor|EE|Earned by community participation at 2000 Reputation in a Network, allowed to update error details
 Error Finder|EF|Found your first error
 Epic|EP|Earn 200 daily reputation 20 times
 Good Answer|GA|Post a Troubleshooting tip that gets voted up 25 or more times
