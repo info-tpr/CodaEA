@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -8,6 +9,8 @@ namespace codaclient.classes
 
     public static class ClientUtilities
     {
+        static private Dictionary<string, string> TemplateCache = new Dictionary<string, string>();
+
         /// <summary>
         /// Launches an external process that is expected to be interactive within the shell window
         /// </summary>
@@ -86,15 +89,24 @@ namespace codaclient.classes
         /// <returns></returns>
         public static string FillTextTemplate(string TemplateFileName, JObject? TemplateData, string PathSeparator)
         {
-            var templateFile = $"{AppContext.BaseDirectory}{PathSeparator}templates{PathSeparator}{TemplateFileName}";
-            var sr = new StreamReader(templateFile);
-            var retVal = sr.ReadToEnd();
-            sr.Close();
+            string retVal;
+            if (TemplateCache.ContainsKey(TemplateFileName))
+            {
+                retVal = TemplateCache[TemplateFileName];
+            }
+            else
+            {
+                var templateFile = $"{AppContext.BaseDirectory}{PathSeparator}templates{PathSeparator}{TemplateFileName}";
+                var sr = new StreamReader(templateFile);
+                retVal = sr.ReadToEnd();
+                sr.Close();
+                TemplateCache.Add(TemplateFileName, retVal);
+            }
             if (TemplateData is not null)
             {
                 foreach (var item in TemplateData)
                 {
-                    var tokenName = item.Key;
+                    var tokenName = $"[{item.Key}]";
                     var tokenValue = $"{item.Value}";
                     retVal = retVal.Replace(tokenName, tokenValue);
                 }

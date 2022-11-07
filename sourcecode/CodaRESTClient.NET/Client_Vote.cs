@@ -15,7 +15,7 @@ namespace CodaRESTClient
         /// <param name="ObjectId"></param>
         /// <param name="Vote"></param>
         /// <returns></returns>
-        public bool Vote(CodaObjectTypeEnum ObjectType, long ObjectId, VoteTypeEnum Vote, string Comments = null)
+        public JObject Vote(CodaObjectTypeEnum ObjectType, long ObjectId, VoteTypeEnum Vote, string Comments = null)
         {
             var objType = String.Empty;
             switch (ObjectType)
@@ -45,6 +45,9 @@ namespace CodaRESTClient
                 case VoteTypeEnum.DenyReport:
                     dir = "denyreport";
                     break;
+                case VoteTypeEnum.AppealReport:
+                    dir = "appeal";
+                    break;
                 default:
                     dir = "up";
                     break;
@@ -52,6 +55,7 @@ namespace CodaRESTClient
             var request = NewRequest($"/api/vote/{dir}/{objType}/{ObjectId}", Method.Post);
             switch (Vote)
             {
+                case VoteTypeEnum.AppealReport:
                 case VoteTypeEnum.Report:
                 case VoteTypeEnum.ConfirmReport:
                 case VoteTypeEnum.DenyReport:
@@ -59,7 +63,14 @@ namespace CodaRESTClient
                     break;
             }
             var response = CodaClient.ExecuteAsync(request).Result;
-            return (response.StatusCode == System.Net.HttpStatusCode.OK);
+            if (!String.IsNullOrEmpty(response.Content))
+            {
+                return JObject.Parse(response.Content);
+            }
+            else
+            {
+                return new JObject() { ["result"] = false };
+            }
         }
 
     }

@@ -53,12 +53,12 @@ namespace codaclient.classes
                                         (CodaClient.AccountHasBadge(MyAccount, "OA", "*") || CodaClient.AccountHasBadge(MyAccount, "DA", $"{Configuration["network"]}")));
                 if (isUserAnAdmin)
                 {
-                    menu += " U)pdate D)eactivate G)en New Key A)dmin toggle";
+                    menu += " U)pdate D)eactivate G)en New Key A)dmin toggle W)generate new Web Secret Passphrase";
                 }
             }
             else if (MyAccount["accountId"] == QueryAccount["accountId"])
             {
-                menu += " U)pdate G)en New Key";
+                menu += " U)pdate G)en New Key W)generate new Web Secret Passphrase";
             }
             if (CodaClient.AccountHasBadge(QueryAccount, "OR", "*") || CodaClient.AccountHasBadge(QueryAccount, "DV", $"{Configuration["network"]}"))
             {
@@ -99,8 +99,31 @@ namespace codaclient.classes
                     case "O":
                         EditOptions(Breadcrumbs + "EditOptions/", Configuration, CodaClient, MyAccount);
                         break;
+                    case "W":
+                        GenNewWebPassphrase(Breadcrumbs + "GenNewWebPassphrase/", Configuration, CodaClient, MyAccount);
+                        break;
                 }
             } while (userinput.ToUpper() != "Q");
+        }
+
+        private static void GenNewWebPassphrase(string Breadcrumbs, JObject Configuration, Client CodaClient, JObject MyAccount)
+        {
+            Console.Clear();
+            ShowBreadcrumbs(Breadcrumbs);
+            CConsole.WriteLine($"{"======= GENERATE NEW WEB SECRET PASSPHRASE =============[Current User: ":blue}{MyAccount["accountName"]:cyan:black}{"]===":blue}");
+            var newPP = CodaClient.GenerateWebLoginPassphrase();
+            if (String.IsNullOrEmpty(newPP))
+            {
+                Pause("An error occurred.  Please try again, or contact The Parallel Revolution for support.");
+            }
+            else
+            {
+                Configuration["webSecret"] = newPP;
+                CConsole.WriteLine($"Your new passphrase is {newPP:white:blue}");
+                Console.WriteLine();
+                CConsole.WriteLine($"{"It has been saved in this config file - but you should copy it to all your config files to make use of it.":red}");
+                Pause(null);
+            }
         }
 
         /// <summary>
@@ -121,11 +144,11 @@ namespace codaclient.classes
             }
             if (CodaClient.AccountHasBadge(MyAccount, "OA", "*"))
             {
-                result = ToggleAdminAccount(Configuration, QueryAccount, "OA", "", CodaClient);
+                result = ToggleAdminAccount(QueryAccount, "OA", "", CodaClient);
             }
             else if (CodaClient.AccountHasBadge(MyAccount, "DA", $"{Configuration["network"]}"))
             {
-                result = ToggleAdminAccount(Configuration, QueryAccount, "DA", $"{Configuration["network"]}", CodaClient);
+                result = ToggleAdminAccount(QueryAccount, "DA", $"{Configuration["network"]}", CodaClient);
             }
             else
             {
@@ -133,14 +156,14 @@ namespace codaclient.classes
                 switch (response.ToUpper())
                 {
                     case "O":
-                        result = ToggleAdminAccount(Configuration, QueryAccount, "OA", "", CodaClient);
+                        result = ToggleAdminAccount(QueryAccount, "OA", "", CodaClient);
                         break;
                     case "D":
                         var usernetwork = Pause("Enter the network to assign for:");
-                        result = ToggleAdminAccount(Configuration, QueryAccount, "DA", usernetwork, CodaClient);
+                        result = ToggleAdminAccount(QueryAccount, "DA", usernetwork, CodaClient);
                         break;
                     case "S":
-                        result = ToggleAdminAccount(Configuration, QueryAccount, "SA", "", CodaClient);
+                        result = ToggleAdminAccount(QueryAccount, "SA", "", CodaClient);
                         break;
                 }
             }
@@ -161,7 +184,7 @@ namespace codaclient.classes
         /// <param name="UserAccount"></param>
         /// <param name="BadgeCode"></param>
         /// <param name="Network"></param>
-        private static bool ToggleAdminAccount(JObject Configuration, JObject UserAccount, string BadgeCode, string Network, Client CodaClient)
+        private static bool ToggleAdminAccount(JObject UserAccount, string BadgeCode, string Network, Client CodaClient)
         {
             if (CodaClient.AccountHasBadge(UserAccount, BadgeCode, Network))
             {

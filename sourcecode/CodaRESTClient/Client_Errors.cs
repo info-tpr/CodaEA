@@ -22,15 +22,17 @@ namespace CodaRESTClient
         /// <param name="NumberOccurrences"></param>
         /// <param name="DescriptionMessage"></param>
         /// <param name="Full"></param>
+        /// <param name="Environment">One of:  PROD, QA, TEST, DEV, or EDU</param>
         /// <returns></returns>
-        public JObject ReportError(string ErrorId, string Network, string NetworkVersion, int NumberOccurrences, string DescriptionMessage, bool Full = false)
+        public JObject ReportError(string ErrorId, string Network, string NetworkVersion, int NumberOccurrences, string DescriptionMessage, bool Full = false, string Environment = "PROD")
         {
             ErrorId = HttpUtility.UrlEncode(ErrorId);
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/errors/{ErrorId}/{Network}", Method.Put);
+            var request = NewRequest($"/api/errors/{HttpUtility.UrlEncode(ErrorId)}/{HttpUtility.UrlEncode(Network)}", Method.Put);
             request.AddHeader("reporting", true);
             request.AddHeader("numinstances", NumberOccurrences);
             request.AddHeader("full", Full);
+            request.AddHeader("environment", Environment);
             var data = new JObject()
             {
                 { "description", DescriptionMessage },
@@ -52,7 +54,7 @@ namespace CodaRESTClient
         {
             ErrorId = HttpUtility.UrlEncode(ErrorId);
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/errors/{ErrorId}/{Network}", Method.Put);
+            var request = NewRequest($"/api/errors/{HttpUtility.UrlEncode(ErrorId)}/{HttpUtility.UrlEncode(Network)}", Method.Put);
             request.AddHeader("full", Full);
             request.AddHeader("reporting", false);
             return GetResponse(request);
@@ -70,7 +72,7 @@ namespace CodaRESTClient
         {
             ErrorId = HttpUtility.UrlEncode(ErrorId);
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/errors/{ErrorId}/{Network}", Method.Patch);
+            var request = NewRequest($"/api/errors/{HttpUtility.UrlEncode(ErrorId)}/{HttpUtility.UrlEncode(Network)}", Method.Patch);
             var data = new JObject
             {
                 { "acceptedSeverity", Severity },
@@ -81,6 +83,18 @@ namespace CodaRESTClient
         }
 
         /// <summary>
+        /// Returns a list of error codes that contain the partial code
+        /// </summary>
+        /// <param name="Network"></param>
+        /// <param name="PartialErrorCode"></param>
+        /// <returns></returns>
+        public JArray SearchErrors(string Network, string PartialErrorCode)
+        {
+            var request = NewRequest($"/api/errors/{HttpUtility.UrlEncode(Network)}/{HttpUtility.UrlEncode(PartialErrorCode)}", Method.Get);
+            return GetResponseArray(request);
+        }
+
+        /// <summary>
         /// Gets all Error Logs that do not have Troubleshooting solutions
         /// </summary>
         /// <param name="Network"></param>
@@ -88,7 +102,7 @@ namespace CodaRESTClient
         public JArray GetUnresolvedErrors(string Network, bool Full = false)
         {
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/errors/getunresolved/{Network}", Method.Get, Full);
+            var request = NewRequest($"/api/errors/getunresolved/{HttpUtility.UrlEncode(Network)}", Method.Get, Full);
             return GetResponseArray(request);
         }
 
@@ -100,7 +114,7 @@ namespace CodaRESTClient
         public JArray GetUnanalyzedErrors(string Network, bool Full = false)
         {
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/errors/getunanalyzed/{Network}", Method.Get, Full);
+            var request = NewRequest($"/api/errors/getunanalyzed/{HttpUtility.UrlEncode(Network)}", Method.Get, Full);
             return GetResponseArray(request);
         }
 
@@ -141,7 +155,7 @@ namespace CodaRESTClient
         {
             ErrorId = HttpUtility.UrlEncode(ErrorId);
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/errors/{Network}/{ErrorId}/subscribe", Method.Get);
+            var request = NewRequest($"/api/errors/{HttpUtility.UrlEncode(ErrorId)}/{HttpUtility.UrlEncode(Network)}/subscribe", Method.Get);
             return GetResponse(request);
         }
 
@@ -149,7 +163,7 @@ namespace CodaRESTClient
         {
             ErrorId = HttpUtility.UrlEncode(ErrorId);
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/errors/{Network}/{ErrorId}/unsubscribe", Method.Get);
+            var request = NewRequest($"/api/errors/{HttpUtility.UrlEncode(ErrorId)}/{HttpUtility.UrlEncode(Network)}/unsubscribe", Method.Get);
             return GetResponse(request);
         }
     }

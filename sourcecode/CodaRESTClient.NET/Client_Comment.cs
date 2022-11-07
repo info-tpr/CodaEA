@@ -95,6 +95,7 @@ namespace CodaRESTClient
             {
                 body.Add("links", Links);
             }
+            request.AddBody(body);
             return GetResponse(request);
         }
 

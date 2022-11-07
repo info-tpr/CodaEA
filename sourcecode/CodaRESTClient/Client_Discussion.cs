@@ -210,7 +210,7 @@ namespace CodaRESTClient
         {
             ErrorId = HttpUtility.UrlEncode(ErrorId);
             Network = HttpUtility.UrlEncode(Network);
-            var request = NewRequest($"/api/discussion/{ErrorId}/{Network}", Method.Get);
+            var request = NewRequest($"/api/discussion/{ErrorId}/{HttpUtility.UrlEncode(Network)}", Method.Get);
             return GetResponseArray(request);
         }
 

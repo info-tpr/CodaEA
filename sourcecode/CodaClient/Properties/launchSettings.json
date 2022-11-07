@@ -2,7 +2,7 @@
   "profiles": {
     "codaclient.linux": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\JayImerman\\Downloads\\cnodelog-alex\\config-alex.json "
+      "commandLineArgs": "E:\\Data\\dotNetDev\\codaea\\CodaRESTServer\\Misc\\TestCases\\Cardano-config.json az"
     }
   }
 }

@@ -169,7 +169,8 @@ namespace codaclient.classes
                 {
                     try
                     {
-                        var result = CodaClient.ReportError(err.ErrorCode, err.Network, $"{Configuration["currentVersion"]}", err.NumberOccurrences, err.ErrorMessage);
+                        var environment = Configuration.ContainsKey("environment") ? $"{Configuration["environment"]}" : "PROD";
+                        var result = CodaClient.ReportError(err.ErrorCode, err.Network, $"{Configuration["currentVersion"]}", err.NumberOccurrences, err.ErrorMessage, false, environment);
                         if (result.ContainsKey("code"))
                         {
                             // Handle error
@@ -212,11 +213,13 @@ namespace codaclient.classes
             }
             if (ErrorAnalysis.ContainsKey("1") || ErrorAnalysis.ContainsKey("0"))
             {
-                var subject = "Error Analysis Has Produced Known Issues";
+                var subject = "Error Analysis Has Found The Following Crucial Errors In Your Logs";
                 var body = new StringBuilder();
-                body.Append("<h1>The following errors were found on your system in the latest run:</h1><br/><br/>");
+                body.Append("<h1>The following errors were found on your system in the latest run</h1><br/>These errors are either identified as Critical, or not identified yet." +
+                    " To help identify errors, you must earn <a href='https://github.com/info-tpr/CodaEA/blob/main/Community_Rules.md#badges'>Error Editor badge</a> and edit the" +
+                    " severity of the error on CodaEA client or website.<br/>");
                 body.Append($"Source: {Environment.MachineName}<br/>");
-                string errorTable = GenerateErrorTable(ErrorAnalysis);
+                string errorTable = GenerateErrorTable(Configuration, ErrorAnalysis);
                 body.Append(errorTable);
                 LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "INFO-0006", "Queueing Analysis email on server...", ErrorLogSeverityEnum.Debug);
                 var result = CodaClient.MailMe(subject, $"{body}");
@@ -236,7 +239,7 @@ namespace codaclient.classes
         /// </summary>
         /// <param name="errorAnalysis"></param>
         /// <returns></returns>
-        private static string GenerateErrorTable(Dictionary<string, ErrorAnalysis> errorAnalysis)
+        private static string GenerateErrorTable(JObject Configuration, Dictionary<string, ErrorAnalysis> errorAnalysis)
         {
             var sb = new StringBuilder();
             sb.Append(ClientUtilities.FillTextTemplate("Mail-notification-tablehead.txt", null, CodaRESTClient.Client.PathSeparator));
@@ -261,9 +264,11 @@ namespace codaclient.classes
                         var meaning = String.IsNullOrEmpty(err.AcceptedMeaning) ? err.AcceptedMeaning : "Unknown";
                         var errData = new JObject()
                         {
+                            ["Network"] = $"{Configuration["network"]}",
                             ["ErrorCode"] = err.ErrorCode,
                             ["Number"] = err.NumberOccurrences,
                             ["Details"] = meaning,
+                            ["APIKey"] = $"{Configuration["apikey"]}",
                         };
                         sb.Append(ClientUtilities.FillTextTemplate("Mail-notification-tablerow.txt", errData, Client.PathSeparator));
                     }
@@ -387,15 +392,76 @@ namespace codaclient.classes
 
         private static void GenerateAnalysisReport(JObject Configuration, SerializableDictionary<string, ErrorAnalysis> ErrorAnalysis)
         {
-            LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "INFO-0008", "Generating Analysis Report...", ErrorLogSeverityEnum.Debug);
+            LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "INFO-0008", "Generating Analysis Data...", ErrorLogSeverityEnum.Debug);
             var reportFileCfg = $"{Configuration["reportPath"]}";
             var reportFolder = Path.GetDirectoryName(reportFileCfg);
             var reportFileBase = Path.GetFileNameWithoutExtension(reportFileCfg);
-            var reportExt = Path.GetExtension(reportFileCfg);
+            var reportExt = ".json"; // Path.GetExtension(reportFileCfg);
             var reportFile = $"{reportFolder}{CodaRESTClient.Client.PathSeparator}{reportFileBase}_{DateTime.Now:yyyy-MM-dd-hh-mm}{reportExt}";
             var fw = new StreamWriter(reportFile);
             fw.Write(JObject.Parse(JsonConvert.SerializeObject(ErrorAnalysis).ToString()).ToString(Newtonsoft.Json.Formatting.Indented));
             fw.Close();
+            LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "INFO-0008", "Generating Analysis Report...", ErrorLogSeverityEnum.Debug);
+            reportFile = $"{reportFolder}{CodaRESTClient.Client.PathSeparator}{reportFileBase}_{DateTime.Now:yyyy-MM-dd-hh-mm}.html";
+            GenerateHTMLReport(reportFile, Configuration, ErrorAnalysis);
+        }
+
+        private static void GenerateHTMLReport(string ReportFile, JObject Configuration, SerializableDictionary<string, ErrorAnalysis> ErrorAnalysis)
+        {
+            LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "RPT-0004", "Generating HTML Report...", ErrorLogSeverityEnum.Debug);
+            try
+            {
+                var fw = new StreamWriter(ReportFile);
+                ///// REPORT HEADER
+                var reportData = new JObject()
+                {
+                    ["Network"] = $"{Configuration["network"]}",
+                    ["ReportDate"] = $"{DateTime.Now}",
+                    ["Hostname"] = Environment.MachineName
+                };
+                fw.Write(ClientUtilities.FillTextTemplate("Report-Header.txt", reportData, Client.PathSeparator));
+                foreach (var section in ErrorAnalysis.Keys)
+                {
+                    ///// SECTION HEADER
+                    reportData = new JObject()
+                    {
+                        ["Severity"] = section switch
+                        {
+                            "1" => "Critical",
+                            "2" => "Important",
+                            "3" => "Nominal",
+                            _ => "Unknown"
+                        }
+                    };
+                    fw.Write(ClientUtilities.FillTextTemplate("Report-SectionBody.txt", reportData, Client.PathSeparator));
+                    foreach (var errorkey in ErrorAnalysis[section].Errors.Keys)
+                    {
+                        ///// REPORT LINE ITEMS
+                        var error = ErrorAnalysis[section].Errors[errorkey];
+                        reportData = new JObject()
+                        {
+                            ["Network"] = error.Network,
+                            ["ErrorCode"] = error.ErrorCode,
+                            ["ErrorMessage"] = error.ErrorMessage,
+                            ["APIKey"] = $"{Configuration["apikey"]}",
+                            ["Number"] = $"{error.NumberOccurrences}",
+                            ["Meaning"] = error.AcceptedMeaning,
+                        };
+                        fw.Write(ClientUtilities.FillTextTemplate("Report-ItemBody.txt", reportData, Client.PathSeparator));
+                    }
+
+                    ///// SECTION ENDING
+                    fw.Write(ClientUtilities.FillTextTemplate("Report-SectionEnd.txt", null, Client.PathSeparator));
+                }
+                ///// Report Footer
+                fw.Write(ClientUtilities.FillTextTemplate("Report-Footer.txt", null, Client.PathSeparator));
+                fw.Close();
+            }
+            catch (Exception ex)
+            {
+                LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "RPT-0005", $"Error writing HTML file: {ex.HResult} - {ex.Message}", ErrorLogSeverityEnum.Error);
+                LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "RPT-0006", $"Report File: {ReportFile}", ErrorLogSeverityEnum.Warning);
+            }
         }
 
         /// <summary>
@@ -507,7 +573,14 @@ namespace codaclient.classes
                 }
                 foreach (var severity in ErrorAnalysis.Keys)
                 {
-                    ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}");
+                    var logref = new JObject()
+                    {
+                        ["date"] = logItem.TimeOccurredUTC,
+                        ["type"] = "journal",
+                        ["file"] = logItem.Network,
+                        ["number"] = 0
+                    };
+                    ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}", logref);
                 }
             }
         }
@@ -563,7 +636,14 @@ namespace codaclient.classes
                     }
                     foreach (var severity in ErrorAnalysis.Keys)
                     {
-                        ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}");
+                        var logref = new JObject()
+                        {
+                            ["date"] = logItem.TimeOccurredUTC,
+                            ["type"] = "eventlog",
+                            ["file"] = logItem.Network,
+                            ["number"] = 0
+                        };
+                        ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}", logref);
                     }
                 }
             } while (evt != null);
@@ -702,29 +782,42 @@ namespace codaclient.classes
                     {
                         msgTypeList.ToObject<List<string>>();
                     }
+                    var entryNumber = 0;
                     // Loop through the log file
                     while (!PluginAssembly.EndOfStream)
                     {
                         // Obtain log entry
-                        var logitem = PluginAssembly.NextLogItem();
-                        if (logitem is not null)
+                        var logItemJObject = PluginAssembly.NextLogItem();
+                        entryNumber++;
+                        if (logItemJObject is not null)
                         {
-                            // Incorporate log entry into error logs
-                            logitem["Network"] = $"{Configuration["network"]}";
-                            var logItemEntry = JsonConvert.DeserializeObject<ReportLogItem>(logitem.ToString());
-                            if (logItemEntry is not null)
+                            var logItem = ParseLogItem(logItemJObject);
+                            if (logItem is not null)
                             {
-                                if ((msgTypes is null) || (msgTypes.Contains(logItemEntry.Severity)))
+                                // Incorporate log entry into error logs
+                                logItemJObject["Network"] = $"{Configuration["network"]}";
+                                var logItemEntry = JsonConvert.DeserializeObject<ReportLogItem>(logItemJObject.ToString());
+                                if (logItemEntry is not null)
                                 {
-                                    var codaRecord = GetCodaInfo(Configuration, logItemEntry, CodaClient, ErrorLogs);
-                                    if (!ErrorAnalysis.ContainsKey($"{codaRecord.AcceptedSeverity}"))
+                                    if ((msgTypes is null) || (msgTypes.Contains(logItemEntry.Severity)))
                                     {
-                                        var ea = new ErrorAnalysis();
-                                        ErrorAnalysis.Add($"{codaRecord.AcceptedSeverity}", ea);
-                                    }
-                                    foreach (var severity in ErrorAnalysis.Keys)
-                                    {
-                                        ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}");
+                                        var codaRecord = GetCodaInfo(Configuration, logItemEntry, CodaClient, ErrorLogs);
+                                        if (!ErrorAnalysis.ContainsKey($"{codaRecord.AcceptedSeverity}"))
+                                        {
+                                            var ea = new ErrorAnalysis();
+                                            ErrorAnalysis.Add($"{codaRecord.AcceptedSeverity}", ea);
+                                        }
+                                        foreach (var severity in ErrorAnalysis.Keys)
+                                        {
+                                            var logref = new JObject()
+                                            {
+                                                ["date"] = logItem.TimeOccurredUTC,
+                                                ["type"] = "file",
+                                                ["file"] = InputFile,
+                                                ["number"] = entryNumber
+                                            };
+                                            ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}", logref);
+                                        }
                                     }
                                 }
                             }
@@ -736,6 +829,22 @@ namespace codaclient.classes
                     LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "FPLG-0003", $"Exception occurred while processing file '{InputFile}', {ex.HResult}: {ex.Message}", ErrorLogSeverityEnum.Error);
                 }
             }
+        }
+
+        /// <summary>
+        /// Parses a log item
+        /// </summary>
+        /// <param name="logItemJObject"></param>
+        /// <returns></returns>
+        private static ReportLogItem? ParseLogItem(JObject logItemJObject)
+        {
+            ReportLogItem? retVal;
+            try
+            {
+                retVal = JsonConvert.DeserializeObject<ReportLogItem>(logItemJObject.ToString(Newtonsoft.Json.Formatting.None));
+                return retVal;
+            }
+            catch { return null; }
         }
 
 
@@ -897,6 +1006,7 @@ namespace codaclient.classes
             {
                 return;
             }
+            /* ==== REMOVE - log ALL error types
             // Filter on Severity list
             var sevs = (JArray)LogSource["messageType"]!["values"]!;
             var sevsList = sevs.ToObject<List<string>>()!;
@@ -904,6 +1014,8 @@ namespace codaclient.classes
             {
                 return;
             }
+            ====== */
+
             ErrorLogItem codaRecord = GetCodaInfo(Configuration, logItem, CodaClient, ErrorLogs);
             if (codaRecord.Source is null)
             {
@@ -930,7 +1042,14 @@ namespace codaclient.classes
             }
             foreach (var severity in ErrorAnalysis.Keys)
             {
-                ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}");
+                var logref = new JObject()
+                {
+                    ["date"] = logItem.TimeOccurredUTC,
+                    ["type"] = "file",
+                    ["file"] = $"{LogSource["inputSpecs"]!["inputFile"]}",
+                    ["number"] = LineCount
+                };
+                ErrorAnalysis[severity].LogError(codaRecord, severity == $"{codaRecord.AcceptedSeverity}", logref);
             }
         }
 

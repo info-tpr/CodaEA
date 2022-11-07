@@ -1,16 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyVersion>2022.1.1</AssemblyVersion>
-    <FileVersion>2022.1.1</FileVersion>
+    <AssemblyVersion>2022.1.3</AssemblyVersion>
+    <FileVersion>2022.1.3</FileVersion>
+    <Description>A .NET 6 Class Library that provides a wrapper to execute CodaEA REST API calls.</Description>
+    <Copyright>Copyright ©  2022 The Parallel Revolution, LLC https://www.theparallelrevolution.com</Copyright>
+    <PackageProjectUrl>https://github.com/info-tpr/CodaEA</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/info-tpr/CodaEA</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>error analysis;error code;codaea;coda error analysis</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="RestSharp" Version="107.3.0" />
-  </ItemGroup>
+    <PackageReference Include="RestSharp" Version="108.0.1" />
+</ItemGroup>
 
 </Project>

@@ -47,7 +47,8 @@ namespace codaclient.classes
                         {
                             var comments = "Enter your comments";
                             comments = EditBody(Breadcrumbs + "EditComments/", Configuration, "EDIT CONFIRMATION COMMENTS", comments);
-                            if (CodaClient.Vote(Enum.Parse<CodaObjectTypeEnum>($"{postid["itemType"]}"), Convert.ToInt64(postid["itemId"]), VoteTypeEnum.ConfirmReport, comments))
+                            var result = CodaClient.Vote(Enum.Parse<CodaObjectTypeEnum>($"{postid["itemType"]}"), Convert.ToInt64(postid["itemId"]), VoteTypeEnum.ConfirmReport, comments);
+                            if (Convert.ToBoolean(result["result"]))
                             {
                                 Pause("Thanks!  Your input has been recorded.  Press ENTER to continue.");
                             }
@@ -67,7 +68,8 @@ namespace codaclient.classes
                         {
                             var comments = "Enter your comments";
                             comments = EditBody(Breadcrumbs + "EditComments/", Configuration, "EDIT DENIAL COMMENTS", comments);
-                            if (CodaClient.Vote(Enum.Parse<CodaObjectTypeEnum>($"{postid["itemType"]}"), Convert.ToInt64(postid["itemId"]), VoteTypeEnum.DenyReport, comments))
+                            var result = CodaClient.Vote(Enum.Parse<CodaObjectTypeEnum>($"{postid["itemType"]}"), Convert.ToInt64(postid["itemId"]), VoteTypeEnum.DenyReport, comments);
+                            if (Convert.ToBoolean(result["result"]))
                             {
                                 Pause("Thanks!  Your input has been recorded.  Press ENTER to continue.");
                             }

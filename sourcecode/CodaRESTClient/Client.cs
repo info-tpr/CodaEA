@@ -3,6 +3,7 @@
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System.ComponentModel;
+using System.Web;
 
 namespace CodaRESTClient
 {
@@ -19,7 +20,8 @@ namespace CodaRESTClient
         VoteDown,
         Report,
         ConfirmReport,
-        DenyReport
+        DenyReport,
+        AppealReport
     }
 
     /// <summary>
@@ -110,7 +112,7 @@ namespace CodaRESTClient
             {
                 try
                 {
-                    rsp = JObject.Parse(response.Content.Replace('\\', ' '));
+                    rsp = JObject.Parse(response.Content); //.Replace('\\', ' ')
                 }
                 catch
                 {
@@ -199,6 +201,57 @@ namespace CodaRESTClient
 
         #region "Account Functions"
 
+        public string GenerateWebLoginPassphrase()
+        {
+            var request = NewRequest("/api/account/genpassphrase", Method.Get);
+            var response = GetResponse(request);
+            if (response.ContainsKey("code"))
+            {
+                return String.Empty;
+            }
+            else
+            {
+                return $"{response["passphrase"]}";
+            }
+        }
+
+        /// <summary>
+        /// Generates or retrieves an active Web Session Token for the given Account
+        /// </summary>
+        /// <returns>Empty string if an error occurred</returns>
+        public string GenerateWebSessionToken()
+        {
+            var request = NewRequest("/api/account/gentoken", Method.Get);
+            var response = GetResponse(request);
+            if (response.ContainsKey("code"))
+            {
+                return String.Empty;
+            }
+            else
+            {
+                return $"{response["token"]}";
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the API Key for the account associated with an active Session Token
+        /// </summary>
+        /// <param name="Token"></param>
+        /// <returns>API Key, or empty string if token expired or invalid</returns>
+        public string GetAPIKeyForSessionToken(string Token)
+        {
+            var request = NewRequest($"/api/account/getkey/{Token}", Method.Get);
+            var response = GetResponse(request);
+            if (response.ContainsKey("code"))
+            {
+                return String.Empty;
+            }
+            else
+            {
+                return $"{response["apikey"]}";
+            }
+        }
+
         /// <summary>
         /// Determines whether or not the badge is assigned to the account
         /// </summary>
@@ -246,6 +299,18 @@ namespace CodaRESTClient
         public JObject DeactivateAccount(long AccountId)
         {
             var request = NewRequest($"/api/account/{AccountId}/deactivate", Method.Patch);
+            return GetResponse(request);
+        }
+
+        /// <summary>
+        /// Retrieves info about a member account
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="Full"></param>
+        /// <returns></returns>
+        public JObject GetAccountInfo(string Email, bool Full = false)
+        {
+            var request = NewRequest($"/api/account/byemail/{HttpUtility.UrlEncode(Email)}", Method.Get, Full);
             return GetResponse(request);
         }
 
@@ -364,8 +429,9 @@ namespace CodaRESTClient
         /// <param name="Name"></param>
         /// <param name="Email"></param>
         /// <param name="WalletAddress"></param>
+        /// <param name="SignupNetwork">Optional Network to sign up for</param>
         /// <returns>Newly created account record (API and recovery keys are emailed to the given address)</returns>
-        public JObject AddNewAccount(string Name, string Email, string WalletAddress)
+        public JObject AddNewAccount(string Name, string Email, string WalletAddress, string? SignupNetwork = null)
         {
             var request = NewRequest("/api/account", Method.Post);
             var data = new JObject
@@ -374,6 +440,10 @@ namespace CodaRESTClient
                 { "email", Email },
                 { "walletAddress", WalletAddress }
             };
+            if (!String.IsNullOrEmpty(SignupNetwork))
+            {
+                request.AddHeader("network", SignupNetwork);
+            }
             request.AddBody(data.ToString(), "text/json");
             return GetResponse(request);
         }
@@ -391,7 +461,7 @@ namespace CodaRESTClient
             {
                 Network = "---";
             }
-            var request = NewRequest($"/api/account/{AccountId}/assignbadge/{BadgeCode}/{Network}", Method.Put);
+            var request = NewRequest($"/api/account/{AccountId}/assignbadge/{BadgeCode}/{HttpUtility.UrlEncode(Network)}", Method.Put);
             return GetResponse(request);
         }
 
@@ -401,7 +471,7 @@ namespace CodaRESTClient
             {
                 Network = "---";
             }
-            var request = NewRequest($"/api/account/{AccountId}/unassignbadge/{BadgeCode}/{Network}", Method.Put);
+            var request = NewRequest($"/api/account/{AccountId}/unassignbadge/{BadgeCode}/{HttpUtility.UrlEncode(Network)}", Method.Put);
             return GetResponse(request);
         }
 
@@ -433,29 +503,7 @@ namespace CodaRESTClient
             return GetResponseArray(request);
         }
 
-        /// <summary>
-        /// Retrieves all info for a given Network
-        /// </summary>
-        /// <param name="Network"></param>
-        /// <returns></returns>
-        public JObject GetNetwork(string Network)
-        {
-            var request = NewRequest($"/api/networks/{Network}", Method.Get);
-            request.AddHeader("full", true);
-            return GetResponse(request);
-        }
-
         #endregion
-
-        /// <summary>
-        /// Gets a list of available Networks in CodaEA
-        /// </summary>
-        /// <returns></returns>
-        public JArray GetListOfNetworks()
-        {
-            var request = NewRequest("/api/networks", Method.Get);
-            return GetResponseArray(request);
-        }
 
         /// <summary>
         /// Gets full info on a specific network
@@ -464,7 +512,7 @@ namespace CodaRESTClient
         /// <returns></returns>
         public JObject GetNetworkInfo(string Network)
         {
-            var request = NewRequest($"/api/networks/{Network}", Method.Get);
+            var request = NewRequest($"/api/networks/{HttpUtility.UrlEncode(Network)}", Method.Get);
             return GetResponse(request);
         }
 
@@ -477,7 +525,7 @@ namespace CodaRESTClient
         /// <returns></returns>
         public bool AddNetwork(string Network, string DisplayName, string IconFile)
         {
-            var request = NewRequest($"/api/networks/{Network}", Method.Post);
+            var request = NewRequest($"/api/networks/{HttpUtility.UrlEncode(Network)}", Method.Post);
             request.AddHeader("displayName", DisplayName);
             request.AddHeader("iconFile", IconFile);
             var response = CodaClient.ExecuteAsync(request).Result;

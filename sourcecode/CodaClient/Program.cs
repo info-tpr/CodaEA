@@ -164,12 +164,12 @@ namespace codaclient.classes
                 }
                 else
                 {
-                    LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "MERG-0001", "Specified Merge spec file does not exist, skipping merge...", ErrorLogSeverityEnum.Warning);
+                    LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "MERG-0002", "Specified Merge spec file does not exist, skipping merge...", ErrorLogSeverityEnum.Warning);
                 }
             }
             catch (Exception ex)
             {
-                LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "MERG-0002", $"Merge failed, Error {ex.HResult}: {ex.Message}", ErrorLogSeverityEnum.Error);
+                LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "MERG-0003", $"Merge failed, Error {ex.HResult}: {ex.Message}", ErrorLogSeverityEnum.Error);
             }
         }
 
@@ -432,7 +432,7 @@ namespace codaclient.classes
 
         private static void LogError(JObject Configuration, JObject Result)
         {
-            LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "API-0001", $"Error calling API: {Result["message"]}", ErrorLogSeverityEnum.Error);
+            LogMessage(Configuration, MethodBase.GetCurrentMethod()!.Name, "CAPI-0001", $"Error calling API: {Result["message"]}", ErrorLogSeverityEnum.Error);
         }
 
         private static string Pause(string? Prompt)

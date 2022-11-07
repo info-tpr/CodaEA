@@ -1,5 +1,5 @@
 ﻿  <tr>
-    <td class="tg-0lax">[ErrorCode]</td>
+    <td class="tg-0lax"><a href="https://www.codaea.io/CodaEA/WebAuthenticate/ShowError?network=[Network]&errorcode=[ErrorCode]&version=version&message=message&apikey=[APIKey]">[ErrorCode]</a></td>
     <td class="tg-0lax">[Number]</td>
     <td class="tg-0lax">[Details]</td>
   </tr>

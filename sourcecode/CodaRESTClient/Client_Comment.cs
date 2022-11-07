@@ -94,6 +94,7 @@ namespace CodaRESTClient
             {
                 body.Add("links", Links);
             }
+            request.AddBody(body.ToString(Newtonsoft.Json.Formatting.None));
             return GetResponse(request);
         }
 

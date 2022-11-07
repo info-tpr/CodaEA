@@ -22,8 +22,9 @@ namespace CodaRESTClient
         /// <param name="NumberOccurrences"></param>
         /// <param name="DescriptionMessage"></param>
         /// <param name="Full"></param>
+        /// <param name="Environment">One of:  PROD, QA, TEST, DEV, or EDU</param>
         /// <returns></returns>
-        public JObject ReportError(string ErrorId, string Network, string NetworkVersion, int NumberOccurrences, string DescriptionMessage, bool Full = false)
+        public JObject ReportError(string ErrorId, string Network, string NetworkVersion, int NumberOccurrences, string DescriptionMessage, bool Full = false, string Environment = "PROD")
         {
             ErrorId = HttpUtility.UrlEncode(ErrorId);
             Network = HttpUtility.UrlEncode(Network);
@@ -31,6 +32,7 @@ namespace CodaRESTClient
             request.AddHeader("reporting", true);
             request.AddHeader("numinstances", NumberOccurrences);
             request.AddHeader("full", Full);
+            request.AddHeader("environment", Environment);
             var data = new JObject()
             {
                 { "description", DescriptionMessage },
@@ -78,6 +80,18 @@ namespace CodaRESTClient
             };
             request.AddBody(data.ToString(), "text/json");
             return GetResponse(request);
+        }
+
+        /// <summary>
+        /// Returns a list of error codes that contain the partial code
+        /// </summary>
+        /// <param name="Network"></param>
+        /// <param name="PartialErrorCode"></param>
+        /// <returns></returns>
+        public JArray SearchErrors(string Network, string PartialErrorCode)
+        {
+            var request = NewRequest($"/api/errors/{HttpUtility.UrlEncode(Network)}/{HttpUtility.UrlEncode(PartialErrorCode)}", Method.Get);
+            return GetResponseArray(request);
         }
 
         /// <summary>

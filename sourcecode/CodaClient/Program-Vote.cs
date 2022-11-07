@@ -31,7 +31,7 @@ namespace codaclient.classes
                 comments = EditBody(Breadcrumbs + "EditComments/", Configuration, $"======= Enter Comments to Report {ItemType} {ItemId} =========[Current User: {MyAccount["accountName"]}]=", $"{comments}");
             }
             var result = CodaClient.Vote(ItemType, ItemId, vote, comments);
-            if (result)
+            if (Convert.ToBoolean(result["result"]))
             {
                 Pause(msg);
             }
