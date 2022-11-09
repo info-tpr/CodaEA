@@ -1,0 +1,8 @@
+﻿<!-- ItemBody Start -->
+<tr>
+    <td class="tg-0lax"><a href="https://www.codaea.io/CodaEA/WebAuthenticate/ShowError?network=[Network]&errorcode=[ErrorCode]&version=version&message=message&apikey=[APIKey]" target="_blank">[ErrorCode]</a></td>
+    <td class="tg-0lax">[Number]</td>
+    <td class="tg-0lax">[ErrorMessage]</td>
+    <td class="tg-0lax">[Meaning]</td>
+</tr>
+<!-- ItemBody End -->
