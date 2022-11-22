@@ -32,6 +32,17 @@ Mainnet:  https://prod.codaea.io
 
 Testnet:  https://test.codaea.io
 
+## Downloads
+
+You can access the CodaClient source via our /sourcecode link, or check out the /binaries link for the pre-compiled version for your Operating System.
+
+NOTICE:  For MacOS or Linux Operating Systems, the unzipped binary will not have the Execute flag set on the binary.  You will have to use `chmod` to set the flag; for example:
+
+`chmod 755 ./CodaClient`
+
+or
+
+`chomd +x ./CodaClient`
 
 ## Command Line Parameters
 Syntax:
