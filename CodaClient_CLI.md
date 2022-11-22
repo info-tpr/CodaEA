@@ -3,35 +3,24 @@
 # CodaClient Command Line Utility
 
 ## Purpose of CodaEA
-CodaEA is an Error Analysis ecosystem designed to link communities around networks or applications for mutual support.  
-Network Operators typically have the job of running server software, which emit execution logs.  Often, the error messages 
-are cryptic or otherwise difficult to determine a) whether they are siginificant or not, and b) what you should do to fix it - 
-especially if you are new to operating that software.
+CodaEA is an Error Analysis ecosystem designed to link communities around networks or applications for mutual support. Network Operators typically have the job of running server software, which emit execution logs.  Often, the error messages are cryptic or otherwise difficult to determine a) whether they are siginificant or not, and b) what you should do to fix it - especially if you are new to operating that software.
 
-CodaEA is the solution.  It provides a public REST API to report the errors, and query to determine what the community has
-analyzed as the appropriate meaning and severity of the error.  It facilitates discussion and troubleshooting.
+CodaEA is the solution.  It provides a public REST API to report the errors, and query to determine what the community has analyzed as the appropriate meaning and severity of the error.  It facilitates discussion and troubleshooting.
 
-Community Members earn reputation for their participation, and that reputation will be tied to the CODA Token cryptocurrency, which
-are awarded to the Members' Cardano wallet by the end of every epoch.
+Community Members earn reputation for their participation, and that reputation will be tied to the CODA Token cryptocurrency, which are awarded to the Members' Cardano wallet by the end of every epoch.
 
 CODA Tokens can also be offered as bounties to help incentivize and prioritize focus on the solution of specific error messages.
 
 The CODA Token payouts and features will be coming later this year.
 
-In order to be able to access the Coda database, you must create and validate an Operator Account.  To do this, please navigate
-to [The Parallel Revolution](https://www.theparallelrevolution.com/Coda) and follow the process to request access.
+In order to be able to access the Coda database, you must create and validate an Operator Account.  To do this, please navigate to [CodaEA](https://www.codaea.io/Account/SignUp) and follow the process to request access.
 
-There are 3 types of Accounts:  Operator, Organizational Administrator, and Organizational User.  CodaClient is designed for
-use by any of these Accounts.
+There are 3 types of Accounts:  Operator, Organizational, and Developer.  CodaClient is designed for use by any of these Accounts.
 
 ## CodaClient
-The CodaClient is a command line utility that allows you, as a Network Operator, to check the output of your logs against the
-CodaEA database of community input on a scheduled or ad-hoc basis, and to query and participate interactively in the analysis,
-troubleshooting and discussion of the Error Codes.
+The CodaClient is a command line utility that allows you, as a Network Operator, to check the output of your logs against the CodaEA database of community input on a scheduled or ad-hoc basis, and to query and participate interactively in the analysis, troubleshooting and discussion of the Error Codes.
 
-The purpose of the CodaClient is to make it easy to interact with the CodaEA system.  CodaEA is a RESTful API, and as such,
-the use of CodaClient is provided as a convenience.  You certainly can utilize the curl command, or write your own code to
-make the API calls.  However, since all the data is in JSON format, it may be more tedious to deal with.
+The purpose of the CodaClient is to make it easy to interact with the CodaEA system.  CodaEA is a RESTful API, and as such, the use of CodaClient is provided as a convenience.  You certainly can utilize the curl command, or write your own code to make the API calls.  However, since all the data is in JSON format, it may be more tedious to deal with.
 
 For full specifications on the CodaEA REST API endpoints, you can simply navigate by browser to the servers:
 
