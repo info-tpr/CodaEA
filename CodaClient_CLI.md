@@ -97,7 +97,7 @@ Parameters | Description
 Analyze causes CodaClient to check logs in specific formats.  If your logs are in a format that is not supported, you may
 either request support on our [Github project page](https://github.com/info-tpr/CodaEA), or investigate whether you can
 configure the application to output in one of the supported formats, or write some code that will transform your application 
-logs to that format.
+logs to that format.  Alternatively, if you can code in Microsoft Visual Studio, you can download our CodaClient Plugin Template located in the /sourcecode folder, and create your own plugin to process files in any format you can develop for.  See [Advanced Topics](CodaClient_Advanced.md) for more details.
 
 If you run the Analyze command, all analyses in the array will be run in order.  If you want to change the order or specify specific analyses, use the --analysis= option, like so:
 
