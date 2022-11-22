@@ -14,7 +14,7 @@ You can customize the stylesheets, layout, and HTML around those fields as desir
 
 ## Custom Plugins
 
-Coming soon, we will support 2 types of Plugins for processing error logs.  We will release a .NET 6 Class code that you can use to create a Class Library project.  You will subclass the CodaEA Class from our repository, and add the methods as required.
+Coming soon, we will support 2 types of [Plugins](Creating%20A%20Plugin.md) for processing error logs.  We will release a .NET 6 Class code that you can use to create a Class Library project.  You will subclass the CodaEA Class from our repository, and add the methods as required.
 
 Plugin Type | Description
 ---- | ----
@@ -37,4 +37,4 @@ We would add that, if your submission is approved, a large Reputation bonus will
 
 # Other Links
 
-[CodaClient CLI](CodaClient_CLI.md) | [About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [About Subscriptions](Subscriptions.md)
+[CodaClient CLI](CodaClient_CLI.md) | [About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [CodaClient Visual Studio Extension](CodaClient_VSIX.md) | [About Subscriptions](Subscriptions.md)

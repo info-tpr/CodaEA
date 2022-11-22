@@ -1,4 +1,4 @@
-![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true)
+﻿![Coda Logo](https://github.com/info-tpr/CodaEA/blob/main/images/CodaLogo-Imageonly-transparent.png?raw=true)
 
 # Community Rules
 
@@ -118,4 +118,4 @@ Yearling|YL|Earn at least 2000 reputation, active for 1 year|100
 
 # Other Links
 
-[CodaClient Command Line Interface Specifications](CodaClient_CLI.md) | [About CodaEA Accounts](Coda_Accounts.md) | [About Subscriptions](Subscriptions.md)
+[CodaClient Command Line Interface Specifications](CodaClient_CLI.md) | [About CodaEA Accounts](Coda_Accounts.md) | [CodaClient Visual Studio Extension](CodaClient_VSIX.md) | [About Subscriptions](Subscriptions.md)

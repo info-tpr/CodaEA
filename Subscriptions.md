@@ -19,4 +19,4 @@ All notifications are collected, and sent to you periodically based on your sche
 
 # Other Links
 
-[Community Rules](Community_Rules.md) | [CodaClient Command Line Interface Specifications](CodaClient_CLI.md) | [About CodaEA Accounts](Coda_Accounts.md) 
+[Community Rules](Community_Rules.md) | [CodaClient Command Line Interface Specifications](CodaClient_CLI.md) | [CodaClient Visual Studio Extension](CodaClient_VSIX.md) | [About CodaEA Accounts](Coda_Accounts.md) 
