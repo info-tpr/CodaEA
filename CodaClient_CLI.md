@@ -17,6 +17,10 @@ In order to be able to access the Coda database, you must create and validate an
 
 There are 3 types of Accounts:  Operator, Organizational, and Developer.  CodaClient is designed for use by any of these Accounts.
 
+## Important Prerequisites
+
+CodaClient requires the Microsoft .NET 6 libraries to be installed on the computer that will run it.  This is included with Windows 10 and later, but for Linux or MacOS you will need to install it.  You can do so by running the included shell script `CodaClient_Prerequisites_Ubuntu.sh`, or by following the instructions from Microsoft for your Operating System.
+
 ## CodaClient
 The CodaClient is a command line utility that allows you, as a Network Operator, to check the output of your logs against the CodaEA database of community input on a scheduled or ad-hoc basis, and to query and participate interactively in the analysis, troubleshooting and discussion of the Error Codes.
 
