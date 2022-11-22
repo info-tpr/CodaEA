@@ -52,7 +52,7 @@ Syntax:
 Example:
 `    CodaClient ./cardano-config.json az`
 
-    <os>:  Supported Operating Systems are Linux (Ubuntu 20.04 LTS)
+    <os>:  Supported Operating Systems are Windows (all 64 bit with .NET 6 or later), Linux (wherever .NET 6 is supported, tested on Ubuntu 20.04 LTS and 24.04 LTS), and MacOS (wherever .NET 6 is supported)
 
     <path-to-config-file>:  See the section on Main Configuration File for file schema.
 
