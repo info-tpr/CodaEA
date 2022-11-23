@@ -16,7 +16,7 @@ Another feature coming soon: CODA Tokens can also be offered by Network Operator
 
 The CODA Token payouts and features will be coming later this year.
 
-In order to be able to access the Coda database, you must create and validate an Operator Account.  To do this, please navigate to [The Parallel Revolution](https://www.theparallelrevolution.com/Coda) and follow the process to request access.
+In order to be able to access the Coda database, you must create and validate an Operator Account.  To do this, please navigate to [the CodaEA Website](https://www.codaea.io), click Register Account, and follow the process to request access.
 
 There are 3 types of Accounts:  Operator, Organizational Administrator, and Organizational User.  CodaClient is designed for use by an Operator Account.
 
