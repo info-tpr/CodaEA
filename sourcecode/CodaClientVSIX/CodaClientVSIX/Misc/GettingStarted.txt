@@ -1,0 +1,36 @@
+﻿CodaEA is Copyright 2022-2023 The Parallel Revolution LLC
+All Rights Reserved
+https://www.codaea.io
+
+Coda Error Analysis is a tool to support the new discipline of Error Code Analysis.  With Visual Studio, 
+we have released a CodaEA Client called CodaEAClientVSIX.  This tool allows you to directly access the CodaEA
+community knowledge base on that error code, post interactions with the community, and receive notifications
+when solutions occur.
+
+Further, if you also participate in Cardano Cryptocurrencies, you can earn rewards for your activities in the
+form of CodaCOIN Tokens and Badge NFTs delivered to your wallet.
+
+In order to get started, select Tools / Configure CodaEA.  If you have an existing Account, paste its API Key
+and select which environment to use.  Otherwise, click Register, and you can sign up and be ready in just a few
+minutes!  A valid email address is required.
+
+For full and up-to-date documentation, please reference:
+
+https://github.com/info-tpr/CodaEA/blob/main/CodaClient_VSIX.md
+
+IMPORTANT NOTES:
+
+1.  CodaEA is currently in Beta Testing.  Your input is crucial to helping shape the future of this valuable
+    service!  If you have any suggestions or feedback, you can join our Discord at https://discord.gg/ecaz5C4mCv
+    or email us at coda@theparallelrevolution.com.
+2.  As such, all Accounts are FREE OF CHARGE until at least January 2023.  At that point we may charge for
+    access to CodaEA, depending on various factors.
+3.  Since we are in Beta, please be patient - we may have outages, errors, or issues with the solution.
+4.  Since we are in Beta, you MUST use the TEST option in the Configuration screen.  When we are ready to
+    transition to PRODUCTION, you will receive an email informing you of any details and instructions.  We will
+    migrate the TEST data to PRODUCTION, so you will retain your Account and any discussions/notes stored in
+    the system.  At that point, you will want to switch your environment to PRODUCTION in order to continue
+    using the publicly-facing system, and TEST will become a testing bed for new functionality.
+
+Again, for any help, feedback, or support please contact us at Discord, Telegram, and email, contact info is
+also on our website.

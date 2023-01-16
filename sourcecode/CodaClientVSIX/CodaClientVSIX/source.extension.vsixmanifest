@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+    <Metadata>
+        <Identity Id="c86aa457-ad41-4755-a76b-76a82093462e" Version="2023.1.1" Language="en-US" Publisher="The Parallel Revolution LLC" />
+        <DisplayName>CodaClientVSIX</DisplayName>
+        <Description xml:space="preserve">Allows users to access CodaEA for analysis and resolution of error codes in Visual Studio</Description>
+        <MoreInfo>https://www.codaea.io</MoreInfo>
+        <License>Misc\License.txt</License>
+        <GettingStartedGuide>Misc\GettingStarted.txt</GettingStartedGuide>
+        <Icon>Resources\CodaAnalyzeCommand.png</Icon>
+        <PreviewImage>Resources\CodaAnalyzeCommand.png</PreviewImage>
+        <Tags>error analysis, coda, codaea</Tags>
+        <Preview>true</Preview>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    </Dependencies>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    </Assets>
+</PackageManifest>
