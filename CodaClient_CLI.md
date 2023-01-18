@@ -258,7 +258,13 @@ The Analyze section is an array of source specifications using the following for
   "inputSpecs": {
       "process": "cardano",
       "type": "error",
-      "maximumSeverity": 1
+      "maximumSeverity": 1,
+      "parsing": true,
+      "parseOptions": {
+          "parseMode": "Published",
+          "parseOption": "ParseAllModes",
+          "parseExclusions": []
+      }
   }
 }
 ```
@@ -277,6 +283,7 @@ input: text/regex | Regular Expression pattern matching for line-based text file
 input: text/&lt;other> | Any other processor represents a plug-in.  `text/` at the beginning indicates to call the Line Processor method.  What you specify in `other` must match the name you assigned in your [Plugins configuration](Creating%20A%20Plugin.md#plugin_config).
 input: file/&lt;other> | File processor plug-in.  `file/` at the beginning indicates to call the File Processor methods.  What you specify in `other` must match the name you assigned in your [Plugins configuration](Creating%20A%20Plugin.md#plugin_config).
 inputSpecs | This is an object that contains the specs for the type indicated for `input`.  For example, if `input` is `journal`, then you would use the Journal Specs for `inputSpecs`.
+inputSpecs: parsing | If `true`, then any log entries that fail to produce an Error Code will be parsed through the Message Pattern Rule parser engine.  For more information, see [About Message Pattern Matching](MessagePatternMatching.md)
 
 Based on the type specified, the `inputSpecs` will use one of the following formats:
 
@@ -597,4 +604,4 @@ In order to optimize performance, the CodaEA API server caches database items fo
 
 # Other Links
 
-[CodaClient Advanced Topics](CodaClient_Advanced.md) | [About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [CodaClient Visual Studio Extension](CodaClient_VSIX.md) | [About Subscriptions](Subscriptions.md)
+[CodaClient Advanced Topics](CodaClient_Advanced.md) | [About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [CodaClient Visual Studio Extension](CodaClient_VSIX.md) | [About Subscriptions](Subscriptions.md) | [About Message Pattern Matching](MessagePatternMatching.md)

@@ -37,4 +37,4 @@ We would add that, if your submission is approved, a large Reputation bonus will
 
 # Other Links
 
-[CodaClient CLI](CodaClient_CLI.md) | [About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [CodaClient Visual Studio Extension](CodaClient_VSIX.md) | [About Subscriptions](Subscriptions.md)
+[CodaClient CLI](CodaClient_CLI.md) | [About CodaEA Accounts](Coda_Accounts.md) | [Community Rules](Community_Rules.md) | [CodaClient Visual Studio Extension](CodaClient_VSIX.md) | [About Subscriptions](Subscriptions.md) | [About Message Pattern Matching](MessagePatternMatching.md)
