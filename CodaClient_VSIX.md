@@ -10,6 +10,8 @@ The CodaClient Visual Studio Extension (VSIX) allows developers to look up error
 1. The dockable view window gives you information and buttons to access various functionality within CodaEA (besides error code lookup)
 1. The Error Lookup function is available from the right-click context menu in the Error List window, for any errors or warnings or ideas.
 
+![CodaEA Menu](https://github.com/info-tpr/CodaEA/blob/main/images/VSIX-Error-Window.png?raw=true)
+
 ## Getting Started
 
 In order to get started, you will need to configure your CodaEA.  This means you will need an account to access the API and Web servers.
