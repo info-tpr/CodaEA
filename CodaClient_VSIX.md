@@ -45,9 +45,9 @@ For now, we have at least a 6 month free trial access.  This means, for at least
 Plan | Details
 ---- | ----
 Basic Access | Unlimited access, for free, for 6 months.
-Monthly | If you pay month-to-month, USD $2 per month
-Annually | If you pay year-to-year, USD $20 per year (save $4 over monthly)
-Long-Term | If you pay 6 years at a time, USD $100 per 6 years (save $20 over annually)
+Monthly | If you pay month-to-month, USD $5 per month
+Annually | If you pay year-to-year, USD $50 per year (save $10 a year)
+Long-Term | If you pay 6 years at a time, USD $300 per 6 years (save $100 compared to annually)
 
 All plans are payable via card for now, Crypto coming up.
 
