@@ -144,6 +144,8 @@ namespace CodaClientVSIX
             var apikey = $"{Registry.CurrentUser.OpenSubKey("CodaEA").GetValue("APIKey")}";
             var request = new RestRequest("/api/account/gentoken", RestSharp.Method.Get);
             request.AddHeader("apikey", apikey);
+            request.AddHeader("clientName", "CodaClientVSIX");
+            request.AddHeader("clientVersion", $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
             var response = apiclient.ExecuteAsync(request).Result;
             if (String.IsNullOrEmpty(response.Content))
             {

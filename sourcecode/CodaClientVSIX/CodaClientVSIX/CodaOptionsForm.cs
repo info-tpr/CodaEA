@@ -70,8 +70,16 @@ namespace CodaClientVSIX
             try
             {
                 var acct = JObject.Parse(response.Content);
-                _AccountId = Convert.ToInt64(acct["accountId"]);
-                return acct;
+                if (acct.ContainsKey("code"))
+                {
+                    MessageBox.Show($"Error from server: {acct["message"]}");
+                    return null;
+                }
+                else
+                {
+                    _AccountId = Convert.ToInt64(acct["accountId"]);
+                    return acct;
+                }
             }
             catch
             {

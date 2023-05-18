@@ -1,8 +1,10 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows;
 using Task = System.Threading.Tasks.Task;
 
 namespace CodaClientVSIX
@@ -56,6 +58,10 @@ namespace CodaClientVSIX
             await CodaToolWindowCommand.InitializeAsync(this);
             await CodaAnalyzeCommand.InitializeAsync(this);
             await CodaConfigCommand.InitializeAsync(this);
+
+            var autoEvent = new AutoResetEvent(false);
+            var statusChecker = new StatusChecker(60);
+            adtimer = new Timer(statusChecker.CheckStatus, autoEvent, 60000, 1000);
         }
 
         private bool KeyExists(RegistryKey baseKey, string subKeyName)
@@ -66,5 +72,39 @@ namespace CodaClientVSIX
         }
 
         #endregion
+
+        #region Advertising
+        private Timer adtimer = null;
+
+        #endregion
+    }
+
+    public class StatusChecker
+    {
+        private int invokeCount;
+        private int maxCount;
+
+        public StatusChecker(int count)
+        {
+            invokeCount = 0;
+            maxCount = count;
+        }
+
+        // This method is called by the timer delegate.
+        public void CheckStatus(Object stateInfo)
+        {
+            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+            Trace.WriteLine($"{DateTime.Now.ToString("h:mm:ss.fff")} Checking status {++invokeCount}.");
+
+            if (invokeCount == maxCount)
+            {
+                // TODO: Build workflow for checking for messages
+
+                // Reset the counter and signal the waiting thread.
+                // MessageBox.Show("Booya");
+                invokeCount = 0;
+                autoEvent.Set();
+            }
+        }
     }
 }
